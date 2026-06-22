@@ -1,0 +1,33 @@
+## Module Behavior and Property Meaning:
+
+This module implements a simple recurrence relation between two large registers, `a` and `b`, over clock cycles:
+- `a` is initialized to 1.
+- `b` is initialized to 0.
+
+On every positive clock edge:
+- If `a < 100`, update `a := a + b`.
+- Regardless of the condition, update `b := a`.
+
+This defines a system of two variables where `a` accumulates its past valurs, and as long as the value of `a` is updated, `b` lags one step behind `a`.
+The given property is a safety property that asserts that `a` always remains below 200 during all reachable states of the system.
+To successfully verify the property `assert property (a<200);` we can propose the following lemma to constrain the state space and simplify the verification:
+
+### Proposed Lemmas: 
+We propose an inductive invariant that strengthens the property: `a < 200` and `b <= a`.
+This  lemma is 1-inductive:
+- If `a < 100`, then `a := a + b`, which preserves `a < 200` if `b <= a`. Simultaneously, `b := a`, which ensures `b <= a` continues to hold in the next cycle.
+- If `a >= 100`, then the values of `a` and `b` do not change, so both conjuncts of the lemma hold in the next cycle.
+As such, it can help the formal tool prove the property more efficiently.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (a < 200 && b <= a); endproperty"
+       }
+   ]
+}
+</json>

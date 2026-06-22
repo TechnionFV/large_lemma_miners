@@ -1,0 +1,873 @@
+{
+  "modules": [
+    {
+      "module_name": "lcd_5-s2.sv",
+      "group_tag": "NeuralMC"
+    },
+    {
+      "module_name": "load_store_1-s1.sv",
+      "group_tag": "NeuralMC"
+    },
+    {
+      "module_name": "vga_4-s1.sv",
+      "group_tag": "NeuralMC"
+    },
+    {
+      "module_name": "vga_4-s2.sv",
+      "group_tag": "NeuralMC"
+    },
+    
+    {
+      "module_name": "RCU_p1.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "RCU_p2.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "fifo.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "am2910_p1.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "am2910_p2.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "am2910_p3.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "fifo_ref_64.sv",
+      "group_tag": "additionals"
+    },
+    {
+      "module_name": "am2910_p4.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "bufferAlloc.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "fifo_vis.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "FourbyFour_p1.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "FourbyFour_p2.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "FourbyFour_p3.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "FourbyFour_p4.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b01.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "b02_p1.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "b02_p2.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "b02_p3.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b03.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "b04.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b05_p1.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b05_p2.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b06_p1.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b06_p2.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b07.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "b08.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "Barrel.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "traffic_light_example_p1.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "traffic_light_example_p2.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "Rrobin_p1.sv",
+      "group_tag": "v2c",
+      "notes": "had 2 more properties that were ommitted due to symmetry",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "Rrobin_p2.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "Rrobin_p3.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "Rrobin_p4.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "edgeDetectors.sv",
+      "group_tag": "textbook"
+    },
+    {
+      "module_name": "gulwani_cegar1_4.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "vlunc.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "Mux8to1_p1.sv",
+      "group_tag": "deleted, textbook",
+      "deleted": "combinatorial"
+    },
+    {
+      "module_name": "decoder.sv",
+      "group_tag": "deleted, textbook",
+      "deleted": "combinatorial"
+    },
+    {
+      "module_name": "h_Spinner.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_2.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_15.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "icctl1_p4.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "s1269b_p5.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "ex3.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "gulwani_cegar2_2.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "ex9.sv",
+      "group_tag": "c, others",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "itc99_b13_10.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "brs1_1_2.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "h_Vsa16a_p2.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "icctl1_p3.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "vsaR_p14.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "h_Arbiter.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "buffer_128.sv",
+      "group_tag": "additionals"
+    },
+    {
+      "module_name": "buffer_64.sv",
+      "group_tag": "additionals"
+    }, 
+    {
+      "module_name": "buffer_32.sv",
+      "group_tag": "additionals"
+    },
+    {
+      "module_name": "simple_cam_8.sv",
+      "group_tag": "additionals"
+    },
+      {
+      "module_name": "simple_cam_16.sv",
+      "group_tag": "additionals"
+    },
+      {
+      "module_name": "counter_66.sv",
+      "group_tag": "additionals"
+    },
+    {
+      "module_name": "lrg_arb_lrg_16.sv",
+      "group_tag": "additionals"
+    },
+    {
+      "module_name": "lrg_arb_lrg_8.sv",
+      "group_tag": "additionals"
+    },
+     {
+      "module_name": "fifo_ref_8.sv",
+      "group_tag": "additionals"
+    },
+       {
+      "module_name": "fifo_ref_4.sv",
+      "group_tag": "additionals"
+    },
+       {
+      "module_name": "fifo_ref_16.sv",
+      "group_tag": "additionals"
+    },
+     {
+      "module_name": "lrg_arb_lrg_4.sv",
+      "group_tag": "additionals"
+    },
+    {
+      "module_name": "buffer_128.sv",
+      "group_tag": "VIS"
+    },
+    {
+      "module_name": "h_Arbiter.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "vsaR_p05.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "dp.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "ex51_a.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "ex4.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "three_processor_bin_2.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "h_Vending.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "gulwani_cegar2_3.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "brs1_2_3.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "icctl1_p2.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "itc99_b13_17.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "gulwani_cegar1.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "ethernet.define.112_vcegar_p3.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "gulwani_cegar1_5.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "vsaR_p13.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "ex1.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "gulwani_fig1a_4.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "itc99_b13_6.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "gulwani_cegar2.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "icram_1.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "gulwani_cegar2_1.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "ex6.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "itc99_b13_8.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "ex90.sv",
+      "group_tag": "c, others",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "gulwani_cegar1_3.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "bcuvis32.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "sdlx_control.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "brs1_2_2.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "not solved",
+      "note": "evaluation anomaly, should be solved"
+    },
+    {
+      "module_name": "gulwani_fig1a_3.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "vsaR_p07.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "ex2.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "brs1_1_1.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "ethernet.define.112_vcegar_p5.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "ex51_57_1.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "itc99_b13_12.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "brs1_1_5.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "priorityEncoder_p2.sv",
+      "group_tag": "deleted, textbook",
+      "deleted": "combinatorial"
+    },
+    {
+      "module_name": "bpbs_p2.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "vsaR_p08.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "two_p2.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_4.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_19.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "ex5.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "vsaR_p16.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "itc99_b13_18.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_9.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "synabs.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "gulwani_fig1a.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "itc99_b13_13.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "vsaR_p11.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "vsaR_p04.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "ex34_30.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "itc99_b13_11.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "itc99_b13_3.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "two_processor_bin_2.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "gulwani_fig1a_2.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "s1269b_p3.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_21.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "h_Vsa16a_p5.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "vsaR_p09.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "synabs_test.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_7.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "ex7.sv",
+      "group_tag": "c, others",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "h_Vsa16_p3.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "vsaR_p03.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "priorityEncoder_p1.sv",
+      "group_tag": "deleted, textbook",
+      "deleted": "combinatorial"
+    },
+    {
+      "module_name": "vsaR_p12.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "ibuf.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "vsaR_p10.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "vsaR_p06.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "brs1_2_5.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "itc99_b13_1.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "ex15.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "gulwani_cegar2_5.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "bit-vector.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "brs1_1_4.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "gulwani_cegar1_2.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "ex100.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "itc99_b13_20.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "ex65.sv",
+      "group_tag": "c, others",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "brs1_1_3.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "JKFF_p2.sv",
+      "group_tag": "deleted, textbook",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "gulwani_fig1a_6.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "pi_bus_p1.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "zdlx_impl.v_for_pred.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "ex8.sv",
+      "group_tag": "c, others",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "gr2006.sv",
+      "group_tag": "c, others",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "gulwani_fig1a_5.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "gulwani_cegar2_4.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "icctl1_p5.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "h_TreeArb.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "h_Dekker.sv",
+      "group_tag": "v2c"
+    },
+    {
+      "module_name": "pipeline.sv",
+      "group_tag": "vcegar",
+      "notes": "one inductive",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "mpeg_1.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "vsaR_p02.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "ex51.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "itc99_b13_16.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "ex34.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "Mux8to1_p2.sv",
+      "group_tag": "deleted, textbook",
+      "deleted": "combinatorial"
+    },
+    {
+      "module_name": "s1269b_p1.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_5.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "brs1_2_1.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "ex80.sv",
+      "group_tag": "c, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "swap2.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "ar.sv",
+      "group_tag": "vcegar, seen",
+      "gpt5_agent": "solved"
+    },
+    {
+      "module_name": "h_TicTacToe.sv",
+      "group_tag": "v2c",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "vMiim.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "s1269b_p2.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "bug_1.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "brs1_2_4.sv",
+      "group_tag": "c, generalize",
+      "gpt5_agent": "not solved"
+    },
+    {
+      "module_name": "bpbs_p1.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "h_Vsa16_p1.sv",
+      "group_tag": "vis"
+    },
+    {
+      "module_name": "arbiter.sv",
+      "group_tag": "deleted, textbook, seen",
+      "gpt5_agent": "solved",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "h_Vsa16a_p4.sv",
+      "group_tag": "vis",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "usb_phy_1.sv",
+      "group_tag": "vcegar"
+    },
+    {
+      "module_name": "singlePortMemoryByteEn.sv",
+      "group_tag": "deleted, textbook",
+      "deleted": "one inductive"
+    },
+    {
+      "module_name": "itc99_b13_14.sv",
+      "group_tag": "vcegar",
+      "deleted": "one inductive"
+    }
+  ]
+}

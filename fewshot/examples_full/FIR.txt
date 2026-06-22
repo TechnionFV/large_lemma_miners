@@ -1,0 +1,40 @@
+### Module Behavior and Property Meaning
+
+This is a 3-tap FIR (Finite Impulse Response) filter with fixed coefficients `{1, 2, 1}`. At each clock cycle, it computes a weighted sum of the current and past two input values (`x`) and assigns it to the output `y`.
+
+Details:
+- `h = {1, 2, 1}` are the filter coefficients.
+- `delay1` stores `x` from the previous cycle.
+- `delay2` stores `x` from two cycles ago.
+- The output is: `y = 1*delay2 + 2*delay1 + 1*x = x + 2 * x(prev) + x(prevprev)`
+
+This is a simple symmetric FIR filter commonly used for smoothing or low-pass filtering.
+
+The safety property states that if x remains constant for 4 consecutive clock cycles (`$stable(x)` has held for the past three cycles), then `y` must equal `4 * x` in the current cycle.
+This is valid because:
+- If `x` has been stable for 4 cycles (`$stable(x)` held in the past three), then:
+    - `x`, `delay1`, and `delay2` will all equal the same value, which is the current value of `x`.
+- Therefore, `y = x + 2*x + x = 4*x`.
+
+### Proposed Lemmas:
+
+We propose a lemma that implies the property and is easier to prove.
+The lemma states that if `x` remains stable for 3 cycles, then both `delay1` and `delay2` must also equal `x` at that point.
+
+It implies the property because if `$stable(x)[*3]` holds in the current state, then by the lemma we have `delay1 == x` and `delay2 == x`.
+Hence, `y = h[2]*x + h[1]*x + h[0]*x = (1 + 2 + 1)*x = 4*x`, so the property holds.
+Thus, lemma_1 captures the internal data dependencies in the pipeline that ensure the property holds.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (!rstN) ($stable(x)[*3] |-> (delay1 == x && delay2 == x)); endproperty"
+       }
+   ]
+}
+</json>
+

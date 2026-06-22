@@ -1,0 +1,86 @@
+### Module Behavior and Property Meaning:
+
+This SystemVerilog module models a bounded loop with a nondeterministic loop condition.
+
+Parameters and Inputs:
+- `WIDTH`: Bit-width of the signed variables (default 32 bits).
+- `clk`: Clock signal.
+- `rst`: Reset signal.
+- `unknown_loop`: External nondeterministic signal that controls loop continuation.
+- `x_raw`: Signed input used to initialize `x`.
+- `y_raw`: Signed input used to initialize `y`.
+
+Internal Variables:
+- `x`, `y`: Internal registers that capture the inputs.
+- `i`: Loop counter, starts from 0.
+- `assumptions_hold`: Boolean flag indicating if initial assumptions are met:
+  - `x >= 0`
+  - `y >= 0`
+  - `x >= y`
+
+State Machine:
+- The FSM has three states:
+  - `IDLE`: Transitions to `LOOP` if the assumptions hold.
+  - `LOOP`: 
+    - If `unknown_loop` is true and `i < y`, increments `i`.
+    - If `unknown_loop` is false, transitions to `DONE`.
+  - `DONE`: Terminal state with no further actions.
+
+Behavior on Reset:
+- When `rst` is high (active):
+  - The FSM enters `IDLE`.
+  - `x`, `y` are initialized from inputs.
+  - `i` is reset to 0.
+
+Property:
+The module includes a property `prop` that asserts:
+  "At every positive clock edge, unless in reset, either the FSM is not in `DONE`, or `i <= x`."
+- This ensures that when the module terminates, the value of `i` never exceeds `x`.
+
+Summary:
+This module verifies a safety condition for a nondeterministically-controlled loop. Provided the assumptions (`x >= 0`, `y >= 0`, `x >= y`) are met, the loop may execute up to `y` iterations. The asserted property guarantees that, regardless of nondeterministic execution, the final value of `i` will not exceed `x`.
+
+
+### Proposed Lemmas:
+
+We propose two 1-inductive lemmas that together imply the property.
+
+Lemma 1: 
+  If `state == LOOP` or `state == DONE`, then `assumptions_hold`. 
+This lemma holds because the only path to `DONE` is through `LOOP`, and the transition from `IDLE` to `LOOP` occurs only if the assumptions hold. Therefore, reaching either `LOOP` or `DONE` implies the assumptions were satisfied.
+
+The lemma is also 1-inductive:
+ - After reset, the FSM is in `IDLE`, so the antecedent (`state == LOOP` or `state == DONE`) is false, and the lemma trivially holds.
+ - If the current state is `IDLE`, the FSM transitions to `LOOP` only when the assumptions hold, ensuring the lemma is satisfied in the next state.
+ - If the FSM is in `LOOP`, then by the lemma the assumptions already hold, and since `x` and `y` remain unchanged, the assumptions continue to hold in the next state—preserving the lemma.
+
+Lemma 2:
+  If the assumptions hold, then `i <= x`. 
+It is 1-inductive because:
+- After reset, `i == 0`, and if the assumptions hold, `x >= 0`, so indeed `i <= x`. 
+- If the lemma holds and the current state is `IDLE` or `DONE`, the variables remain unchanged, so the lemma continues to hold in the next state.
+- If the lemma holds and the current state is `LOOP`:
+  - If `unknown_loop` is low, the values of the variables remain unchanged, so the lemma holds in the next state.
+  - If `unknown_loop` is high and `i < y`, then `i` is incremented by 1. Since the lemma holds in the current state, the assumptions hold and therefore `y >= x`. Since we have `i < x` before the increment, `i <= x` holds afterward and the lemma is satisfied in the next state.
+  - If `unknown_loop` is high and `i >= y`, the variables remain unchanged, and the lemma holds in the next state.
+
+Together, the lemmas imply the property:
+- If `state == DONE`, Lemma 1 ensures that `assumptions_hold`.
+- Given that the assumptions hold, Lemma 2 guarantees that `i <= x`.
+Overall, we obtain that if `state == DONE`, it must be the case that `i <= x`, establishing the correctness of the property.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1;  @(posedge clk) disable iff (rst) ((state != DONE && state != LOOP) || assumptions_hold); endproperty"
+       },
+       {
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (rst) (~assumptions_hold || i <= x); endproperty"
+       }
+   ]
+}
+</json>

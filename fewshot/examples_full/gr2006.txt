@@ -1,0 +1,57 @@
+### Module Behavior and Property Meaning:
+This SystemVerilog module models a controlled loop with two signed counters, x and y (default width: 8 bits), initialized to 0.
+On each positive clock edge, **if** `y >= 0`:
+- If `x < 50`: increment y by 1.
+- Else (`x >= 50`): decrement y by 1.
+- Then increment x by 1.
+
+This results in the following behavior:
+- For x from 0 to 49: y is incremented → `y == x` throughout this phase.
+- For x from 50 to 100: y is decremented symmetrically → the sum `x + y` remains 100.
+The loop stops once `y < 0`, which happens after 101 cycles (when `x = 101` and `y = -1`).
+
+The property is a safety property which asserts that `x` never exceeds 101. 
+
+## Proposed Lemmas:
+
+We propose a lemma which captures the different operational phases of the system and specifies an invariant for each.
+This lemma implies the original property and is 1-inductive, allowing the model checker to verify it using simple 1-induction.
+- Phase 1 (`x < 50`): `x == y` because both `x` and `y` are incremented together.
+- Phase 2 (`x >= 50`): After crossing `x = 50`, `x` continues increasing, `y` decreases. Their sum remains constant at `x + y == 100`, and `y >= -1` since the loop continues until just before y becomes negative.
+
+It directly implies the property `x <= 101`:
+- In phase 1, `x < 50` -> trivially `x <= 101`.
+- In phase 2, the condition `x + y == 100` and `y >= -1` implies `x <= 101`.
+
+The lemma is 1-inductive, as shown by a case analysis over the two disjuncts:
+- Phase 1: Suppose `(x < 50) && (x == y)` holds.
+    - On the next step, both `x` and `y` are incremented by 1, so `x == y` continues to hold.
+    - If the new value of `x` is still less than 50, then the first conjunct remains satisfied.
+    - If the new value of `x` becomes 50, then:
+        - `x >= 50` holds,
+        - `x + y = 50 + 50 = 100`,
+        - and `y = 50 >= -1`,
+    So the second conjunct holds. Therefore, the overall disjunction (the lemma) remains true.
+
+- Phase 2: Suppose `(x >= 50) && (x + y == 100) && (y >= -1)` holds.
+    - If `y >= 0`, then on the next step:
+        - `x` is incremented by 1,
+        - `y` is decremented by 1,
+        - so the sum `x + y` remains unchanged at 100, `y` remains `>= –1`, and `x` remains `>= 50`.
+        Thus, all parts of the conjunct continue to hold.
+    - If `y < 0`, the update block is skipped (guarded by `if (y >= 0)`), and `x` and `y` remain unchanged.
+      Hence, the conjunct continues to hold trivially at the next step.
+                        
+Conclusion: If the lemma holds in the current cycle, then in all cases, the lemma holds in the next cycle, proving 1-inductiveness.
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) ((x < 50) && (x == y)) || ((x >= 50) && (x + y == 100) && (y >= -1)); endproperty"
+       }
+   ]
+}
+</json>

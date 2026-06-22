@@ -1,0 +1,61 @@
+### Module Behavior and Property Meaning:
+
+This SystemVerilog module implements a simple state machine that iterates over a large array and writes to specific positions based on a condition. It also maintains a counter to track how many such writes occur.
+
+Parameters:
+- `WIDTH`: Bit-width of each element in the array (default 8 bits).
+- `n`: Number of expected write operations (default 16).
+- `N`: Total number of array elements = 8 * n (default 128).
+
+Behavior on Reset:
+- When `rst` is high (active):
+  - The loop index `i` is reset to 0.
+  - The array `a` of size `N` is initialized to 0.
+  - The variable `sum` is reset to 0.
+  - The FSM state is set to `LOOP`.
+
+Behavior in `LOOP` State:
+- On each rising edge of `clk`:
+  - If `i` is less than `N`:
+    - `i` is incremented by 1.
+    - If `i` is divisible by 8:
+      - `a[i]` is set to 1.
+      - `sum` is incremented by 1.
+  - Once `i` reaches `N`, the FSM transitions to the `DONE` state.
+
+Notes:
+- The loop writes the value 1 to every 8th index of array `a`, starting from index 8.
+- Since the loop goes up to `N = 8*n`, and only every 8th element is updated, exactly `n` elements will be written.
+- `sum` counts the number of these write operations and should equal `n` at the end.
+
+The property `prop` asserts:
+  "At every positive clock edge, unless in reset, either the FSM is not in `DONE` state, or the `sum` equals `n`."
+Meaning that when the loop is done, the expected number of writes has occurred.
+
+
+### Proposed Lemmas:
+We propose two lemmas that together imply the property.
+- The first lemma expresses the relationship between `sum` and `i` during the loop: `sum == i / 8`. This holds because `sum` is incremented only when `i` is divisible by 8, meaning `sum` tracks how many multiples of 8 have occurred up to the current value of `i`.
+- The second lemma asserts that when the FSM reaches the `DONE` state, the loop index `i` has reached `8*n`, which is the total number of iterations. This follows directly from the definition of `N = 8*n`.
+
+Together, these lemmas imply that at the end of the loop (`state == DONE`), we have:
+- `i == 8*n`
+- `sum == i / 8 == (8*n) / 8 == n`
+
+This guarantees that `sum == n` when the loop completes, as required by the property.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (sum == i / 8); endproperty"
+       },
+       {
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (rst) (state != DONE || i == 8*n); endproperty"
+       }
+   ]
+}
+</json>

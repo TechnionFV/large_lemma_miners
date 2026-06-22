@@ -1,0 +1,95 @@
+{
+  "buffer_128": {
+    "time": 0.06
+  },
+  "buffer_32": {
+    "time": 0.01
+  },
+  "buffer_64": {
+    "time": 0.03
+  },
+  "counter_66": {
+    "time": "timeout"
+  },
+  "dp": {
+    "time": "timeout"
+  },
+  "ex15": {
+    "time": "timeout"
+  },
+  "ex3": {
+    "time": "timeout"
+  },
+  "ex4": {
+    "time": "timeout"
+  },
+  "ex51": {
+    "time": "timeout"
+  },
+  "ex51_57_1": {
+    "time": "timeout"
+  },
+  "ex80": {
+    "time": "timeout"
+  },
+  "fifo_ref_16": {
+    "time": 0.04
+  },
+  "fifo_vis": {
+    "time": 619.63
+  },
+  "fifo_ref_64": {
+    "time": 0.15
+  },
+  "gr2006": {
+    "time": 275.51
+  },
+  "gulwani_cegar2": {
+    "time": "timeout"
+  },
+  "gulwani_cegar2_1": {
+    "time": 123.82
+  },
+  "gulwani_cegar2_2": {
+    "time": 119.36
+  },
+  "gulwani_cegar2_3": {
+    "time": "timeout"
+  },
+  "gulwani_cegar2_4": {
+    "time": "timeout"
+  },
+  "gulwani_cegar2_5": {
+    "time": "timeout"
+  },
+  "gulwani_fig1a": {
+    "time": "timeout"
+  },
+  "gulwani_fig1a_2": {
+    "time": "timeout"
+  },
+  "gulwani_fig1a_4": {
+    "time": "timeout"
+  },
+  "gulwani_fig1a_5": {
+    "time": "timeout"
+  },
+  "gulwani_fig1a_6": {
+    "time": "timeout"
+  },
+  "lrg_arb_lrg_4": {
+    "time": 0.02
+  },
+  "lrg_arb_lrg_16": {
+    "time": "timeout"
+  },
+  "lrg_arb_lrg_8": {
+    "time": 2.55
+  },
+  "simple_cam_16": {
+    "time": 0.06
+  },
+  "simple_cam_8": {
+    "time": 0.03
+  }
+}

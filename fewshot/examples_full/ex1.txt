@@ -1,0 +1,35 @@
+This SystemVerilog module defines a simple sequential circuit where three 32-bit registers a, b, and c rotate their values on every rising clock edge.
+**Module Behavior:**
+
+- Initial values:
+  - `a = 1`, `b = 2`, `c = 3`
+- On each `posedge clk`, the values are rotated:
+  - `a <= b`
+  - `b <= c`
+  - `c <= a`
+- This forms a cyclic permutation of the initial values (1, 2, 3):
+  - After 1 cycle: a=2, b=3, c=1
+  - After 2 cycles: a=3, b=1, c=2
+  - After 3 cycles: a=1, b=2, c=3 (back to start)
+So over time, the values (1,2,3) rotate among the registers.
+
+**Property Meaning:**
+The property is a safety property which asserts that on every clock cycle, a and b must hold different values.
+Given the rotation of distinct values among a, b, and c, this condition will always be true, assuming distinct initial values.
+
+**Proposed Lemmas:**
+To support the verification of the property over time, we propose a lemma that constitutes a stronger invariant capturing the mutual distinctness of all three registers. 
+This invariant holds in the initial state and is preserved under the cyclic updates, making it 1-inductive and easier to verify. 
+Since it implies the original property, it effectively aids the verification process.
+
+The corresponding JSON block is given below.
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (a != b && b != c && a != c); endproperty"
+       }
+   ]
+}
+</json>

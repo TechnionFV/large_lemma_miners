@@ -1,0 +1,42 @@
+### Module Behavior and Property Meaning
+
+This is a clock divider module that divides an input clock by 6 (i.e., it toggles the output `clkOut` every 3 input clock cycles).
+- The parameter `PARAM = 3` determines the number of input clock cycles before toggling the output.
+- A `count` variable increments on every posedge clk.
+- When `count == PARAM`, the counter resets to 0 and toggles the output clkOut.
+
+This means:
+- `clkOut` changes (toggles) every 3 cycles,
+- So it has a period of 6 cycles (3 high + 3 low).
+
+The property 'prop' is a safety property that ensures that `clkOut` does not remain high for more than `PARAM + 1` cycles. Specifically, it asserts that `clkOut == 1` cannot hold continuously for `PARAM + 2` cycles. With `PARAM = 3`, this means clkOut must not stay at 1 for 5 or more consecutive cycles. 
+
+### Proposed Lemmas:
+
+We propose three lemmas that support the proof of this property:
+- Lemma 1 states that the counter never exceeds `PARAM` (i.e., `count <= PARAM`). This captures the boundedness of the counter and ensures it resets when expected.
+- Lemma 2 ensures that if `clkOut` stays high for two cycles in a row, the counter must increment. 
+- Lemma 3 asserts that if `clkOut` stays high for `PARAM + 1` cycles, then count must reach `PARAM` at the end of that duration.
+They help the model checker reduce the state space and prove the safety property more efficiently.
+
+To show that these lemmas imply the property, assume for contradiction that the property is violated—that is, `clkOut` remains high for `PARAM + 2` consecutive cycles. Then in the previous cycle, it must have already been high for `PARAM + 1` cycles, which—by Lemma 3—implies that `count == PARAM` in the previous cycle.
+Now, since `clkOut` is still high in the current cycle, it has been high for at least two consecutive cycles. By Lemma 2, the counter must have incremented from the previous value, meaning `count == PARAM + 1` now.
+But this contradicts Lemma 1, which asserts that `count <= PARAM`. Therefore, the assumption that `clkOut` remains high for `PARAM + 2` cycles leads to a contradiction, and the property must hold.
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (!rstN) (count <= PARAM); endproperty"
+       }, 
+       {   
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (!rstN) (not (clkOut == 1 and $past(clkOut == 1)) or (count == $past(count)+1)); endproperty"
+       },
+       {
+           "lemma_3": "property lemma_3; @(posedge clk) disable iff (!rstN) (((clkOut == 1)[*(PARAM+1)]) |-> (count == PARAM)); endproperty"
+       }
+   ]
+}
+</json>

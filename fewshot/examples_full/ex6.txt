@@ -1,0 +1,44 @@
+### Module Behavior and Property Meaning:
+
+This module models a small loop that modifies variables `x`, `y`, and `z` across clock cycles, with a conditional update depending on `z <= y`.
+
+- `x`: an 8-bit counter starting at 0 and incremented if `x < 5`.
+- `y`: conditionally updated to `z` if `z <= y`.
+- `z`: unspecified; assumed to be set externally.
+- `first`: a flag that is initially `1` and is set to `0` after the first clock cycle.
+
+At each positive clock edge:
+- `first` is cleared.
+- If `x < 5`, `x` is incremented.
+  - If `z <= y`, then `y` is updated to `z`.
+
+The property states that either it's the first cycle (`first` is still true), or the condition `z >= y` holds. Essentially, it exempts the first cycle and then enforces that `z >= y` always holds afterward. 
+This is a safety property ensuring that `y` never exceeds `z` from the second clock cycle onwards.
+
+
+## Proposed Lemmas:
+
+We propose a lemma with two conjuncts:
+- `(first || (z >= y))`: this directly implies the property.
+- `(z >= y || x < 5)`: this says that if `z < y`, then it must be the case that the loop is still running (`x < 5`).
+
+The lemma facilitates the proof of the property by strengthening it into a 1-inductive invariant.
+- The first conjunct of the lemma directly corresponds to the property, ensuring that the lemma implies the property.
+- The second conjunct introduces a constraint on when the inequality `z < y` may occur — specifically, only while the loop is active (`x < 5`).
+
+The lemma is 1-inductive since if `z >= y` holds in the current state, it will continue to hold in the next state, and both conjuncts of the lemma remain valid.
+If `z < y` holds, the second conjunct ensures that `x < 5`. In this case, the update logic assigns `y := z` in the next state, ensuring that `z >= y` holds thereafter. Thus, both conjuncts of the lemma are satisfied in the next step.
+
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (first || z >= y) &&  (z >= y || x < 5); endproperty"
+       }
+   ]
+}
+</json>

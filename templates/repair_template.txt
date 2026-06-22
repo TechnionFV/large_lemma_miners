@@ -1,0 +1,32 @@
+You are given feedback for your lemmas below. Read it carefully, it is meant to guide you towards giving better lemmas.
+
+## Reminder
+- Your task is to generate lemmas such that, when combined with the target safety property, the conjunction is 1-inductive.
+- The target safety property remains the same.
+- You have already seen the SystemVerilog module in the first message of this conversation.
+
+Below are the candidate lemmas from the last iteration and feedback for each.
+
+## Instructions
+- If a lemma is incorrect, revise it or remove it altogether.
+- If a lemma is correct but fails to form a one-inductive argument when combined with the property, revise it or propose an alternative lemma that does.
+- You may also introduce new lemmas that are likely to help.
+- Keep the list concise and relevant.
+
+## Output Format
+- Please stick to the output format that was specified in the first message. I.e., give the proposed lemmas in a JSON block as follows:
+    <json>
+    {
+    "lemmas": [
+        {
+            "lemma": "property lemma_<index>; <SVA lemma>; endproperty",
+            "explanation": "<Concise rationale here>"
+        }
+    ]
+    // ... additional lemmas in sequential order as needed
+    }
+    </json>
+
+
+## Feedback for previous lemmas
+

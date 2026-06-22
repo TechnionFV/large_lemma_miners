@@ -1,0 +1,91 @@
+### Module Behavior and Property Meaning:
+
+This SystemVerilog module implements a simple countdown loop that uses a pair of counters (`x` and `y`) to track progress. It starts with `x = n` and decrements `x` while incrementing `y` until `x` reaches 0. The final assertion checks that, when complete, the result `y` matches the input value `n`, provided that `n` is non-negative.
+
+Parameters and Inputs:
+- `WIDTH`: Bit-width of the signed variables (default 32 bits).
+- `clk`: Clock signal.
+- `rst`: Reset signal.
+- `n_raw`: Signed input value that sets the initial values of `x`, `n`, and indirectly controls loop iterations.
+
+Internal Variables:
+- `n`: Captured copy of `n_raw`.
+- `x`: Countdown register, initialized to `n`.
+- `y`: Counter that tracks how many times `x` has been decremented.
+- `n_nonneg`: Signal representing the assumption that `n >= 0`.
+
+State Machine:
+- FSM has two states:
+  - `LOOP`: While `x > 0`, increment `y` and decrement `x`.
+  - `DONE`: Terminal state where the loop halts. The FSM stays here once reached.
+
+Behavior on Reset:
+- When `rst` is high (active):
+  - `n` and `x` are initialized to `n_raw`.
+  - `y` is set to 0.
+  - The FSM enters the `LOOP` state.
+
+Property:
+The module includes a property `prop` that asserts:
+  "At every rising clock edge, unless in reset, either the FSM is not in `DONE`, or `n < 0`, or `y == n`."
+- This ensures that when the FSM finishes, the counter `y` must match the original input `n`, unless `n` was negative.
+
+Summary:
+This module is a canonical example of using two counters to simulate a loop and verify that the number of iterations performed (`y`) matches the initial count (`n`). The assertion guarantees correctness only when `n` is non-negative.
+
+
+### Proposed Lemmas:
+We propose three lemmas that are collectively 1-inductive and imply the property.
+
+Lemma 1:
+ On every rising clock edge, unless in reset, `y + x == n`.
+
+Lemma 2:
+ On every rising clock edge, unless in reset, if `state == DONE` and `n >= 0`, then `x == 0`.
+
+Lemma 3:
+ On every rising clock edge, unless in reset, if `n >= 0` then `x >= 0`.
+
+These lemmas together are 1-inductive:
+- After reset:
+  - `y == 0` and `x == n`, so `y + x == n` holds (Lemma 1).
+  - `state != DONE`, so Lemma 2 holds vacuously. 
+  - If `n >= 0`, then `x == n >= 0`, so Lemma 3 holds.
+- Assuming the lemmas hold in the current state:
+  - If `state == LOOP`:
+    - If `x > 0`:
+      - `x` is decremented and `y` incremented by 1. Their sum remains unchanged, so Lemma 1 holds in the next state. 
+      - Since the FSM stays in `LOOP`, the second lemma holds vacuously in the next state.
+      - For Lemma 3: since `x` was positive and decremented by 1, the new `x` satisfies `x >= 0`, and Lemma 3 holds in the next state.
+    - If `x <= 0`:
+      - The FSM transitions to `DONE`. The variables `x` and `y` are not updated in this case, so Lemma 1 still holds in the next state. 
+      - As for Lemma 2 and Lemma 3:
+        - If `n < 0`, they hold trivially.
+        - If `n >= 0`, then since Lemma 3 holds in the current state, `x >= 0`; combining with `x <= 0`, we obtain `x == 0`, so the consequents of Lemma 2 and Lemma 3 are satisfied in the next state, and these lemmas hold in the next state.
+  - If `state == DONE`: No further updates occur, so all lemmas remain true in the next state.
+
+The conjunction of the three lemmas implies the property because:
+- If `state == DONE` and `n >= 0`: 
+  - By Lemma 2, we have that `x == 0`.
+  - Lemma 1 then gives `y + x == n`, so `y == n` as required.
+
+Note: Lemmas 1 and 2 are sufficient to prove the property. Lemma 3 is added to provide a 1-inductive argument.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst)  (y + x == n); endproperty"
+       },
+       {
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (rst) (state == DONE && n >= 0) |-> x == 0; endproperty"
+       },
+       {
+           "lemma_3": "property lemma_3;  @(posedge clk) disable iff (rst) (n >= 0 |-> x >= 0); endproperty"
+       }
+   ]
+}
+</json>

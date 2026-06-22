@@ -1,0 +1,35 @@
+
+### Module Behavior and Property Meaning:
+This module defines four 8-bit registers: x, y, z, and k, all initialized to 0.
+
+On every rising edge of the clock:
+- If x < 64:
+  - If k % 3 == 0, then x is incremented by 1.
+  - y and z are incremented by 1.
+  - k is updated to x + y + z.
+
+As a result:
+- y and z increase on every clock cycle.
+- x increases only on cycles when k is divisible by 3.
+
+
+The property asserts that on every clock cycle, x, y, and z are all equal. 
+It is nontrivial since x is guarded by an additional condition (k % 3 == 0) while y and z are incremented unconditionally.
+
+### Proposed Lemmas:
+
+We propose a lemma that strengthens the property by adding the conjunct that k is divisible by 3.
+This conjunct means that, despite the differing static update conditions, all three variables are in fact incremented on every cycle.
+The lemma is 1-inductive: it holds in the initial state, and if `x == y == z` and `k % 3 == 0` at some cycle, then all three variables are incremented by 1 in the next cycle. As a result, their equality is preserved, and the updated value of k becomes three times the new value of x, which remains divisible by 3.
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (x == y && y == z && (k % 3) == 0); endproperty"
+       }
+   ]
+}
+</json>

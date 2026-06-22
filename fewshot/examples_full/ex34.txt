@@ -1,0 +1,75 @@
+### Module Behavior and Property Meaning:
+
+The SystemVerilog module `ex34` implements a simple countdown loop starting from a signed input value `n_raw`. It initializes a counter `x` with the value of `n_raw` and decrements it as long as it is positive.
+
+Parameters and Inputs:
+- `WIDTH`: Bit-width of the signed variables (default 32 bits).
+- `clk`: Clock signal.
+- `rst`: Reset signal.
+- `n_raw`: Signed input value used to initialize the counter.
+
+State Machine:
+The module uses a finite state machine with three states:
+  - `IDLE`: Assigns `x = n` and transitions to `LOOP`.
+  - `LOOP`: Decrements `x` by 1 on each clock cycle while `x > 0`. Transitions to `DONE` when `x <= 0`.
+  - `DONE`: A terminal state in which no further updates occur.
+
+
+Behavior on Reset:
+When `rst` is high:
+  - `state` is reset to `IDLE`.
+  - The counter `x` is reset to 0.
+  - The variable `n` is assigned the value of `n_raw`.
+
+Property:
+The module includes a property `prop` that asserts:
+  "On every rising edge of `clk`, if not in reset, whenever the state is `DONE`, it must be that either `n < 0` or `x == 0`."
+This holds since if `n` is non-negative, the loop continues until `x` reaches exactly 0. If `n` is negative or 0 initially, the system transitions directly to `DONE`.
+
+Summary:
+This module performs a countdown from `n`. If `n > 0`, it executes `n` clock cycles of decrements until `x == 0`. If `n <= 0`, it enters `DONE` immediately. The asserted property ensures that at the point the system reaches `DONE`, either `x == 0`, or the input `n` was negative.
+
+
+### Proposed Lemmas:
+We propose two 1-inductive lemmas that together imply the property.
+
+The first lemma asserts that on every clock cycle, either `n < 0` or `x >= 0`. 
+It is 1-inductive because:
+- It holds after reset: `x` is initialized to 0.
+- Assuming the lemma holds and the current state is `IDLE`:
+  - If `n < 0`, then since `n` remains unchanged in state `IDLE`, the lemma continues to hold in the next step.
+  - If `n >= 0`, then since `x` is assigned the value of `n` in state `IDLE`, which is nonnegative, the lemma also holds in the next state.
+- Assuming the lemma holds and the current state is `LOOP`:
+  - If `n < 0`, then since `n` remains unchanged in the `LOOP` state, the lemma continues to hold in the next step.
+  - Otherwise, if `x` is strictly positive, it is decremented by 1, and it thus remains nonnegative in the next state. If `x` is not strictly positive, the system transitions to `DONE`, where no further updates occur — preserving the lemma's condition.
+
+The second lemma asserts that when `state == DONE`, it must hold that `x <= 0`. 
+It is also 1-inductive:
+- After reset, the state is not `DONE`, so the lemma holds.
+- If currently in `IDLE`, the next state is `LOOP`, not `DONE`.
+- If in `LOOP`:
+  - If `x > 0`, the system remains in `LOOP`, and `x` decrements.
+  - If `x <= 0`, the system transitions to `DONE`, and since `x` is unchanged, `x <= 0` - the second disjunct - will hold in the next state as well.
+
+Together, these lemmas imply the original property:
+- When `state == DONE`, Lemma 2 ensures `x <= 0`.
+  - If `x == 0`, the property holds directly.
+  - If `x < 0`, then by Lemma 1, since `x >= 0` does not hold, it must be that `n < 0`. Thus, the property’s disjunction also holds.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+      {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (n < 0 || x >= 0); endproperty"
+    
+      },
+      {
+           "lemma_1": "property lemma_2; @(posedge clk) disable iff (rst) (state != DONE || x <= 0); endproperty"
+    
+      }
+   ]
+}
+</json>

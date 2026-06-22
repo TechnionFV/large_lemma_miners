@@ -1,0 +1,82 @@
+### Module Behavior and Property Meaning:
+
+This SystemVerilog module models a state machine that updates a counter `c` based on two external logic signals, `unknown_loop` and `unknown_branch`. The module loops through conditional logic and terminates when a certain condition is met. It also includes a property assertion that enforces a final relation between the variables `c` and `d`.
+
+Parameters and Inputs:
+- `WIDTH`: Bit-width of the data signals (default 32 bits).
+- `clk`: Clock signal.
+- `rst`: Reset signal.
+- `d_raw`: Unsigned input value used to initialize `d`.
+- `unknown_loop`: External signal controlling whether the loop executes on a given cycle.
+- `unknown_branch`: External signal controlling which conditional update branch is taken inside the loop.
+
+Internal Registers:
+- `c`: A counter updated conditionally.
+- `d`: The comparison target, initialized from `d_raw`.
+
+State Machine:
+- The FSM includes three states:
+  - `IDLE`: Initializes `c` to 0 and moves to `LOOP`.
+  - `LOOP`: Executes conditional updates to `c` when `unknown_loop` is true.
+    - If `unknown_branch` is true and `c == d - 1`, then `c` is incremented by 2.
+    - Else if `unknown_branch` is false and `c == d`, then `c` is set to 1.
+    - If `unknown_loop` is false and `c != 0`, the FSM transitions to `DONE`.
+  - `DONE`: Terminal state. No further updates occur.
+
+Behavior on Reset:
+- When `rst` is high (active):
+  - The FSM enters `IDLE`.
+  - `c` is reset to 0.
+  - `d` is initialized from `d_raw`.
+
+The module includes a property `prop` that asserts:
+  "On each rising edge of `clk`, unless in reset, either the FSM is not in `DONE`, or `c != d`."
+- This ensures that when the FSM reaches the `DONE` state, the counter `c` must not equal `d`.
+
+
+### Proposed Lemmas:
+
+We propose two 1-inductive lemmas that together imply the property.
+
+Lemma 1:
+ If `c == 0` then `state` is not `DONE`.
+
+Why it is 1-inductive:
+- It holds after reset, as `state` after reset is `IDLE` and not `DONE`, so the consequent (and thus the lemma) is satisfied. 
+- If the lemma holds and the FSM is in `IDLE`, the next state is `LOOP`, so the lemma continues to hold. 
+- If the lemma holds and the FSM is in `LOOP`:
+  - If `unknown_loop` is high, the system remains in `LOOP`, regardless of the value of `unknown_branch`. So in the next state, `state != DONE` and the consequent (and thus the lemma) holds.
+  - If `unknown_loop` is low, the system transitions to `DONE` only if `c != 0`. Therefore, the condition `c == 0 && state == DONE` never occurs in the next state, preserving the lemma.
+
+Lemma 2:
+ If `c != 0` then `c != d`.
+
+This lemma is 1-inductive because:
+- It holds after reset:  after reset, `c == 0`, so the antecedent does not hold, and the implication is trivially satisfied.
+- If the lemma holds and the current state is `IDLE`, then the value of `c` is 0 in the next state, so the antecedent is false and the lemma continues to hold.
+- If the lemma holds and the current state is `LOOP`:
+  - If `unknown_loop` is high,
+    - When `unknown_branch` is high, `d` remains unchanged and `c` is updated only if `c == d - 1`, in which case `c` becomes `d + 1`, ensuring `c != d` in the next state. If `c != d - 1`, `c` remains unchanged, and since the lemma holds in the current state, it holds in the next as well.
+    - When `unknown_branch` is low, `c` is updated only if `c == d`, in which case `c` becomes 1. Then, regardless of whether `c != d` holds in the next state, the antecedent `c != 0` fails, and the lemma is satisfied. 
+  - If `unknown_loop` is low, `c` and `d` remain unchanged in the next state. Since the lemma held at the current state, it continues to hold in the next state.
+
+Together, the two lemmas imply the property as follows:
+- If `state == DONE`, the first lemma guarantees that `c != 0`. 
+- Given that `c != 0`, the second lemma ensures that `c != d`.
+  Overall, this establishes that if `state == DONE`, it must be that `c != d`, and the property holds as required.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (c == 0 |-> state != DONE); endproperty"
+       },
+       {
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (rst) (c != 0 |-> c != d); endproperty"
+       }
+   ]
+}
+</json>

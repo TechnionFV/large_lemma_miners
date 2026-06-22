@@ -1,0 +1,40 @@
+### Module Behavior and Property Meaning:
+
+This module implements a simple fixed-priority arbiter which processes a `NumRequests` number of request signals.
+On each rising clock edge, it samples request_raw into request. Then it grants the first (lowest index) active request by setting the corresponding bit in grant.
+The granted flag ensures that only one grant is issued per cycle.
+This is a combinational priority encoder wrapped inside a clocked process.
+The safety property is an unsigned integer comparison between the entire bitvectors grant and request. It holds if and only if the binary number represented by grant is less than or equal to that of request.
+
+### Proposed Lemmas:
+We observe that at any time, if `grant[i]` is set, then `request[i]` must have been set. This directly implies the property being verified.
+Moreover, at most one `grant` can be high at any given time due to the priority arbiter's nature.
+Based on the above invariants, we can propose intermediate lemmas to simplify the verification:
+
+1. **Lemmas 1 + 2** assert that if `grant[i]` is high, `request[i]` must be high. They ensure that the `grant` signal is not set without a corresponding active `request`. 
+   They directly imply the original property and are easier to reason about.
+2. **Lemma 3**: At any point, only one bit in `grant` can be high. It helps constrain the state space by noting that the arbiter grants only one request at a time.
+
+These lemmas, when assumed, should make it easier for Jasper to verify the original property by reducing the complexity of the verification task into smaller, more manageable parts.
+
+
+### JSON Block:
+
+Below is the JSON block containing the proposed lemmas:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) ((~grant[0] || request[0]) && (~grant[1] || request[1]) && (~grant[2] || request[2]) && (~grant[3] || request[3])); endproperty"
+       },
+       {
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (rst) ((grant & ~request) == 0); endproperty"  
+       },
+       {
+	      "lemma_3": "property lemma_3; @(posedge clk) disable iff (rst) ($countones(grant) <= 1); endproperty"    
+	   }
+   ]
+}
+</json>
+

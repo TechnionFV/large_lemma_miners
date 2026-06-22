@@ -1,0 +1,50 @@
+### Module Behavior and Property Meaning
+
+The `BidirectionalCounter` is a parameterized module that implements a counter with both up and down counting capabilities. `upDown` determines the counting direction. When `upDown` is high, the counter increments, and when low, it decrements.
+It is parameterized by:
+- Width (default: 8 bits)
+- MaxValue (default: 255)
+
+On reset (rst), the counter is set to 0.
+- If upDown == 1 and count < MaxValue, the counter increments.
+- If upDown == 0 and count > 0, the counter decrements.
+The counter saturates at the boundaries (0 and MaxValue) — it does not overflow or underflow.
+
+
+The property being verified states that in the absence of resets, one of two things must happen:
+- The `upDown` signal keeps toggling infinitely often, or
+- Eventually, the `count` value stops changing permanently.
+Put simply, if upDown ever stops toggling, then the counter must eventually stabilize.
+
+
+
+### Proposed Lemmas:
+We observe the following:
+- The counter cannot exceed `MaxValue`. If `upDown` remains high from some point onward, the counter will eventually saturate at `MaxValue`.
+- Likewise, the counter is bounded below by zero. If `upDown` remains low from some point onward, the counter will eventually stabilize at `0`.
+
+Building on these invariants, we propose a lemma which strengthens the original property by explicitly characterizing the only two stable states the counter can reach when resets are absent and `upDown` stops toggling. It partitions the system's long-term behavior into three mutually exclusive outcomes:  
+(1) `upDown` continues toggling forever, or
+(2) the counter eventually reaches `MaxValue` and stays there, or  
+(3) the counter eventually reaches `0` and stays there.
+
+The lemma replaces the abstract ($past(count) == count) "stuck" condition with more specific terminal states (`count == 0` or `count == MaxValue`). These help reduce the reachable state space and are easier for model checkers to reason about.
+The lemma also implies the original property. That property accepts two behaviors, in the absence of resets:
+1. `upDown` keeps changing (toggling forever).
+2 `upDown` stops changing from some point onward -> eventually `count` stops changing.
+The lemma refines (2) by saying: if `upDown` stops toggling, then `count` eventually reaches one of two possible boundaries and remains there.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) ((always s_eventually ($past(upDown) != upDown)) or (s_eventually (always count == MaxValue)) or (s_eventually (always count == 0))); endproperty"
+       }
+   ]
+}
+</json>
+
+

@@ -1,0 +1,88 @@
+### Module Behavior and Property Meaning:
+
+This SystemVerilog module models a conditional loop controlled by input assumptions and nondeterminism. It starts with initial values `x_raw` and `y_raw` and, under certain bounded assumptions, updates `x` and `y` in a loop. A formal property defines a safety condition on the impact of bounded inputs and nondeterministic loop continuation on the state of `x` and `y`. 
+
+Parameters and Inputs:
+- `WIDTH`: Bit-width of the unsigned variables (default 32 bits).
+- `clk`: Clock signal.
+- `rst`: Reset signal.
+- `unknown_loop`: External nondeterministic signal controlling loop continuation.
+- `x_raw`, `y_raw`: Initial input values for registers `x` and `y`.
+
+Internal Variables:
+- `x`, `y`: Updated loop variables.
+- `x_init`, `y_init`: Captured initial values of `x_raw` and `y_raw`.
+- `cond`: Boolean condition that checks whether `x` and `y` are within the range [0, 2].
+- `assumptions_hold`: Signal that encodes the same range condition on the initial values of `x` and `y`.
+
+State Machine:
+- The FSM has three states:
+  - `COND`: Checks if the initial values satisfy the bounded condition (`x`, `y` ∈ [0, 2]).
+    - If true, proceeds to `LOOP`.
+    - If false, goes directly to `DONE`.
+  - `LOOP`: Executes while `unknown_loop` is high.
+    - Increments both `x` and `y` by 2 on each iteration.
+    - Transitions to `DONE` when `unknown_loop` becomes false.
+  - `DONE`: Terminal state. No further updates.
+
+Behavior on Reset:
+- On `rst`:
+  - Initial values `x_init` and `y_init` are stored.
+  - `x` and `y` are initialized from `x_raw` and `y_raw`.
+  - FSM enters the `COND` state.
+
+Property:
+The module includes a safety property `prop` that asserts:
+  "On every clock edge, unless in reset, if `assumptions_hold` (the initial assumptions hold) and `y == 0` and `x <= 4`, then `x < 4` must hold."
+
+
+### Proposed Lemmas:
+
+The property is not 1-inductive on its own and requires strengthening via supporting lemmas. We propose two 1-inductive lemmas that together imply the property.
+
+Lemma 1:
+  On every rising clock edge, unless in reset, `(x - x_init) == (y - y_init)`.
+
+It is 1-inductive because:
+- It holds after reset: `x` and `y` are initialized to `x_init` and `y_init`, so both differences are zero and the equality holds.
+- Assuming Lemma 1 holds in the current state:
+  - In `COND`: None of the involved variables (`x`, `y`, `x_init`, `y_init`) change, so the lemma continues to hold.
+  - In `LOOP`:
+    - If `unknown_loop` is high, both `x` and `y` are incremented by 2, and the initial values remain constant. Thus, `(x - x_init)` and `(y - y_init)` both increase by 2, preserving their equality.
+    - If `unknown_loop` is low, the FSM transitions to `DONE` with no changes to `x`, `y`, `x_init`, or `y_init`, so the lemma remains valid in the next state.
+Thus, Lemma 1 holds initially (after reset), and if it holds in any given state, it continues to hold after one transition. This confirms that the lemma is 1-inductive.
+
+Lemma 2:
+  On every rising clock edge, unless in reset, if `assumptions_hold`, then `(x_init <= y_init + 2)`.
+
+If `assumptions_hold` holds, then by definition `x_init` and `y_init` are both in the range `[0, 2]`. Therefore, the maximum possible difference between `x_init` and `y_init` is 2, and the inequality `x_init <= y_init + 2` must hold.
+Since the lemma is logically valid, it is also trivially 1-inductive.
+
+Together, Lemma 1 and Lemma 2 imply the property as follows:
+- Suppose `assumptions_hold`, `y == 0`, and `x <= 4`. We want to show that `x < 4`.
+- From Lemma 2, since `assumptions_hold`, we have `x_init <= y_init + 2`.
+- From Lemma 1, we know `x - x_init == y - y_init`. Given `y == 0`, this implies `x = x_init - y_init`.
+
+Substituting into the bound from Lemma 2:
+`x = x_init - y_init <= (y_init + 2) - y_init = 2`.
+Hence, `x <= 2`, which clearly implies `x < 4`, as required.
+
+(Note: This follows from the general fact that if `x - x_init = y - y_init` and `x_init <= y_init + 2`, then `x <= y + 2`. With `y = 0`, this yields `x <= 2`.)
+
+Thus, the two lemmas together establish the correctness of the property.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) ( (x - x_init) == (y - y_init)); endproperty"
+       },
+       {
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (rst) (assumptions_hold |-> (x_init <= y_init+2)); endproperty"
+       }
+   ]
+}
+</json>

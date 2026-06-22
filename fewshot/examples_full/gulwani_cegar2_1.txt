@@ -1,0 +1,104 @@
+### Module Behavior and Property Meaning:
+
+The SystemVerilog module `gulwani_cegar2` implements a bounded loop that updates several counters and registers based on a nondeterministic branch signal. A formal property is defined to assert a constraint on how many times a certain branch can be taken under a specific condition.
+
+Parameters and Inputs:
+- `WIDTH`: Bit-width of the unsigned variables (default 32 bits).
+- `clk`: Clock signal.
+- `rst`: Reset signal.
+- `unknown_branch`: External nondeterministic input that controls a conditional update.
+- `n_raw`: Initial value assigned to `n`.
+
+Internal Variables:
+- `x`: Main loop counter.
+- `m`: Stores `x` when the `unknown_branch` condition is taken.
+- `n`: A secondary counter initialized from `n_raw` and updated by +2 under certain conditions.
+- `c`: Counts the number of times `n` is incremented.
+
+State Machine:
+- The FSM has two states:
+  - `LOOP`: Active while `x < 800`.
+    - `x` is incremented unconditionally.
+    - If `unknown_branch` is true:
+      - `m` is updated to `x`.
+      - If `n < 0xFFFFFFFE`, `n` is incremented by 2 and `c` is incremented by 1.
+  - `DONE`: Terminal state, reached once `x == 800`.
+
+Behavior on Reset:
+- On `rst`:
+  - `x`, `m`, `c` are set to 0.
+  - `n` is initialized from `n_raw`.
+  - FSM enters the `LOOP` state.
+
+Property Assertion:
+- The module includes a property `prop` that asserts:
+  "At every rising clock edge, unless in reset, if `x > n` holds, then `c < 400` must also hold."
+- This expresses a bound on how many times the conditional increment of `n` can occur, assuming `x` has advanced beyond `n`.
+
+Summary:
+This module simulates a loop of 800 iterations where a nondeterministic branch may trigger updates to two variables (`n` and `c`). The assertion expresses a constraint on `c` (the number of times `n` is incremented), conditional on the loop counter `x` surpassing `n`. 
+
+
+### Proposed Lemmas:
+We propose two lemmas that are 1-inductive and together imply the property `prop`.
+
+Lemma 1:
+  On every rising clock edge, unless in reset, `n >= 2*c`.
+
+It is 1-inductive because:
+- After reset:
+  `c == 0`, so `n == n_raw >= 0 == 2 * c`, and the lemma holds.
+- Assuming the lemma holds in the current state:
+  - In `LOOP`:
+    - The only case where `n` and `c` are updated is when `unknown_branch` is true and `n < 0xFFFFFFFE`.
+    - In this case:
+      - `n` becomes `n + 2`, and `c` becomes `c + 1`.
+      - Overflow cannot occur for either update:
+        - `n < 0xFFFFFFFE` ensures that `n + 2` stays within 32-bit unsigned bounds.
+        - Since `c < n` before the update, we have `c + 1 < n + 2`, so `c + 1` is also safely within bounds.
+      - So the next state satisfies `n' = n + 2`, `c' = c + 1`, and `n' = n + 2 >= 2*c + 2 = 2*(c + 1) = 2*c'`, preserving the lemma.
+  - In `DONE`:
+    - No further updates occur, so if the lemma holds now, it continues to hold.
+  
+  Thus, Lemma 1 is 1-inductive.
+
+
+Lemma 2:
+  On every rising clock edge, unless in reset, `c <= x` and `x <= 800`.
+
+Proof of 1-Inductiveness:
+- Base case (after reset):
+  `c == 0` and `x == 0`, so both `c <= x` and `x <= 800` hold.
+- Inductive step — assume the lemma holds in the current state:
+  - If in `LOOP`: 
+    - If `x < 800`, then:
+       - `x` is incremented by 1 unconditionally.
+       - `c` may be incremented by at most 1 (only if the `unknown_branch` is taken).
+       - Therefore, in the next state:
+         - `x <= 800` still holds (since we assumed `x < 800` in the current state).
+         - `c <= x` is preserved because both may increase by 1, or only `x` may increase. 
+    - If `x >= 800`, the FSM transitions to `DONE`, and no further updates occur to `x` or `c`. Since the lemma holds in the current state, it continues to hold in the next state. 
+  - If in `DONE`:
+    - No variables are updated, so the lemma remains valid in the next state.
+
+Together the two lemmas imply the desired property as follows:
+- Assume `x > n`. We aim to show that `c < 400`.
+- By Lemma 1, we have `n >= 2 * c`. Combining this with `x > n`, we get `x > 2 * c`.
+- By Lemma 2, we also have `x <= 800`.
+- Therefore, `800 >= x > 2 * c` and `400 > c`, as required.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (n >= 2*c); endproperty"
+       },
+       {
+           "lemma_2": "property lemma_2; @(posedge clk) disable iff (rst) (c <= x && x <= 800); endproperty"
+       }
+   ]
+}
+</json>

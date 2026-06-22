@@ -1,0 +1,57 @@
+### Module Behavior and Property Meaning:
+
+Description:
+The SystemVerilog module `ex15` simulates a loop that iterates over values from 0 up to `n_init`, conditionally updating a variable `m` based on an external input signal `unknown`. Once the loop condition is no longer met, the internal `state` variable transitions to `DONE`, and the module ceases to update its internal variables.
+
+Parameters and Inputs:
+- `WIDTH`: Bit-width of the data signals (default 32 bits).
+- `clk`: Clock signal.
+- `rst`: Reset signal.
+- `n_init`: Input value specifying how many times to iterate the loop.
+- `unknown`: External logic signal that determines whether `m` should be updated.
+
+State Machine:
+- The module defines a simple FSM with three states:
+  - `IDLE`: Initialization state. Sets `x` and `m` to 0 and transitions to `LOOP`.
+  - `LOOP`: Iterates while `x < n`.
+    - On each iteration:
+      - If `unknown` is true, sets `m` to the current value of `x`.
+      - Increments `x`.
+    - Once `x >= n`, transitions to `DONE`.
+  - `DONE`: Terminal state. No operations performed.
+
+Behavior on Reset:
+- When `rst` is high (active):
+  - `x`, `m` are set to 0.
+  - `n` is initialized to the input `n_init`.
+  - The state is set to `IDLE`.
+
+Property:
+- The module includes a property `prop` that asserts:
+  "At every rising clock edge, unless in reset, either the state is not `DONE`, or `n <= 0`, or `m < n`."
+- This ensures that when the loop finishes (in `DONE` state), the final value of `m` is strictly less than `n`, or `n` was non-positive to begin with.
+- Since the module loops from `x = 0` to `x = n`, assigns `m = x` when the `unknown` signal is true, and only then increments `x`, the maximum value `m` can take is `n - 1`.
+
+
+
+### Proposed Lemmas:
+
+We propose a single lemma that is stronger than the original property and is 1-inductive. This lemma asserts that the desired condition holds at every clock cycle, not just in the final configuration where `state == DONE`.
+The lemma is 1-inductive because, under the assumption that `rst` is low:
+- If `n` is nonpositive at any clock cycle, it will remain nonpositive in the next cycle, since `n` is only updated during `reset` at the beginning of the execution trace.
+- If `n` is positive, then `m < n` holds. In the current cycle, `m` can only be updated to the current value of `x`, and since `x < n`, the inequality `m < n` will continue to hold in the next state.
+
+This lemma clearly implies the original property.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (n <= 0 || m < n); endproperty"
+       }
+   ]
+}
+</json>

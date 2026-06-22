@@ -1,0 +1,126 @@
+{
+  "buffer_128": {
+    "error": null,
+    "time": "TIMEOUT"
+  },
+  "buffer_32": {
+    "error": null,
+    "time": 188.0
+  },
+  "buffer_64": {
+    "error": null,
+    "time": 435.0
+  },
+  "counter_66": {
+    "error": null,
+    "time": "TIMEOUT"
+  },
+  "dp": {
+    "error": null,
+    "time": 6.0
+  },
+  "ex15": {
+    "error": null,
+    "time": 187.0
+  },
+  "ex3": {
+    "error": null,
+    "time": 54.0
+  },
+  "ex4": {
+    "error": null,
+    "time": 3.0
+  },
+  "ex51": {
+    "error": null,
+    "time": 4.0
+  },
+  "ex51_57_1": {
+    "error": null,
+    "time": 6.0
+  },
+  "ex80": {
+    "error": null,
+    "time": 2340.0
+  },
+  "fifo_ref_16": {
+    "error": null,
+    "time": "TIMEOUT"
+  },
+  "fifo_ref_64": {
+    "error": null,
+    "time": "TIMEOUT"
+  },
+  "fifo_vis": {
+    "error": null,
+    "time": 1580
+  },
+  "gr2006": {
+    "error": null,
+    "time": 820.0
+  },
+  "gulwani_cegar2": {
+    "error": null,
+    "time": 187.0
+  },
+  "gulwani_cegar2_1": {
+    "error": null,
+    "time": 287.0
+  },
+  "gulwani_cegar2_2": {
+    "error": null,
+    "time": 356.0
+  },
+  "gulwani_cegar2_3": {
+    "error": null,
+    "time": 233.0
+  },
+  "gulwani_cegar2_4": {
+    "error": null,
+    "time": 218.0
+  },
+  "gulwani_cegar2_5": {
+    "error": null,
+    "time": "TIMEOUT"
+  },
+  "gulwani_fig1a": {
+    "error": null,
+    "time": 192.0
+  },
+  "gulwani_fig1a_2": {
+    "error": null,
+    "time": 853.0
+  },
+  "gulwani_fig1a_4": {
+    "error": null,
+    "time": 613.0
+  },
+  "gulwani_fig1a_5": {
+    "error": null,
+    "time": 192.0
+  },
+  "gulwani_fig1a_6": {
+    "error": null,
+    "time": "TIMEOUT"
+  },
+  "lrg_arb_lrg_16": {
+    "error": null,
+    "time": 907.0
+  },
+  "lrg_arb_lrg_4": {
+    "error": null,
+    "time": 3.0
+  },
+  "lrg_arb_lrg_8": {
+    "error": null,
+    "time": 5.0
+  },
+  "simple_cam_16": {
+    "error": null,
+    "time": 188.0
+  },
+  "simple_cam_8": {
+    "error": null,
+    "time": 187.0
+  }
+}

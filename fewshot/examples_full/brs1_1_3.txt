@@ -1,0 +1,49 @@
+### Module Behavior and Property Meaning:
+
+This SystemVerilog module `brs1` implements a simple sequential loop that runs over 19 iterations, with a counter `i` ranging from 0 to 19.
+
+Key Behavior:
+- On reset (`rst` high):
+    - The counter `i` is set to 0.
+    - The array a of 19 elements is initialized to all zeros.
+    - The sum register is initialized to 0.
+    - The state is set to LOOP.
+
+- In the `LOOP` state:
+    - On every positive clock edge, if `i < 19`, it:
+        - Increments `i`.
+        - If `(i % 1 == 0)`, it:
+            - Sets `a[i] = 1` if `(i % 1 == 0)`. 
+            - Increments `sum` by 1.
+    - When `i` reaches 19, the FSM transitions to `DONE`.
+
+Note:
+Since the condition `(i % 1 == 0)` is always true, the loop updates `a[i]` in every cycle. As a result, the array is completely filled with ones, and `sum` ends up counting the number of loop iterations, which is 19.
+
+The property `prop` asserts that: 
+  "On every rising clock edge, unless in reset, the value of `sum` must not exceed 19."
+
+
+### Proposed Lemmas:
+
+The property prop always holds because `sum` increments once per cycle up to a maximum of 19, and then stops. To make this behavior easier to verify, we propose the following lemma:
+- On every rising clock edge (unless in reset), sum <= i and i <= 19.
+
+This lemma is 1-inductive, since:
+- If it holds at the current step and `i < 19`, then on the next cycle both `i` and `sum` increase by 1, so the two inequalities still hold.
+- If `i == 19`, the FSM enters the `DONE` state and both `i` and `sum` remain unchanged on the next cycle, so the lemma continues to hold.
+
+Together, the two conditions `sum <= i` and `i <= 19` clearly imply the original property `sum <= 19`.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (sum <= i) && (i <= 19); endproperty"
+       }
+   ]
+}
+</json>

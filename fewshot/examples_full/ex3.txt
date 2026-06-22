@@ -1,0 +1,57 @@
+### Module Behavior & Property Meaning:
+
+This module defines three 11-bit signed registers: `x`, `y`, and `flag`, all initialized to 0.
+
+On each rising edge of the clock:
+- The entire body is guarded by `if (flag < 1)`, so once `flag` becomes 1, there are no further updates to the system.
+- If `y < 0`, then `flag` is set to 1.
+- If `flag < 1` still holds after the above step, then `x` is incremented by 1.
+- `y` is then updated depending on the value of `x`:
+  - If `x < 50`: increment `y`.
+  - Else: decrement `y`.
+
+The system evolves through two phases:
+1. **Ramp-up phase** (`x < 50`):  
+   - `x` and `y` both increment together.
+   - In this phase, `x == y` always holds.
+2. **Ramp-down phase** (`x >= 50`):  
+   - `x` continues to increment, `y` begins to decrement.
+   - Once `y == -1`, `flag` is set to 1, y is decremented by 1 and the system halts.
+
+The property states that either the system is still active (flag < 1, there are still updates), or it has halted in a specific final state: x == 99 and y == -2.
+I.e., it expresses a safety condition on the halting state.
+
+### Proposed Lemmas:
+We propose a lemma that characterizes the entire execution path as a disjunction of phase-specific invariants:
+1. Ramp-up phase:
+`x < 50`, `y >= 0`, `x == y`
+Describes the period where both counters increase in lockstep.
+
+2. Transition phase:
+`x >= 50`, `y >= 0`, `x + y == 98`
+From x = 50, y = 48, the invariant `x + y == 98` holds as x increases and y decreases.
+
+3. Final pre-halting state:
+`x == 99`, `y == -1`
+One step before the final halting configuration.
+
+4. Halting state:
+`flag == 1`, `x == 99`, `y == -2`
+Ensures the system halts in the desired terminal state.
+
+
+The lemma outlines a 1-inductive invariant that constrains the system’s state at every point in its execution.
+It implies the property, since if `flag < 0` does not hold, then the final disjunct holds, implying exactly the required halting values for x and y.
+
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) (flag < 1 && x < 50 && y >= 0 && x == y) || (flag < 1 && x >= 50 && y >=0 && x + y == 98) || (flag < 1  && x == 99 & y == -1) || (flag == 1 && y == -2 && x == 99); endproperty"
+       }
+   ]
+}
+</json>

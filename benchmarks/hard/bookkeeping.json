@@ -1,0 +1,37 @@
+{
+    "buffer_32": "buffers",
+    "buffer_64": "buffers",
+    "buffer_128": "buffers",
+
+    "counter_66": "counters",
+    "dp": "counters",
+    "ex3": "counters",
+    "ex4": "counters",
+    "ex15": "counters",
+    "ex51": "counters",
+    "ex51_57_1": "counters",
+    "ex80": "counters",
+    "gr2006": "counters",
+    "gulwani_cegar2": "counters",
+    "gulwani_cegar2_1": "counters",
+    "gulwani_cegar2_2": "counters",
+    "gulwani_cegar2_3": "counters",
+    "gulwani_cegar2_4": "counters",
+    "gulwani_cegar2_5": "counters",
+    "gulwani_fig1a": "counters",
+    "gulwani_fig1a_2": "counters",
+    "gulwani_fig1a_4": "counters",
+    "gulwani_fig1a_5": "counters",
+    "gulwani_fig1a_6": "counters",
+
+    "lrg_arb_lrg_4": "arbiters",
+    "lrg_arb_lrg_8": "arbiters",
+    "lrg_arb_lrg_16": "arbiters",
+
+    "fifo_ref_16": "queues",
+    "fifo_ref_64": "queues",
+    "fifo_vis": "queues",
+
+    "simple_cam_8": "CAM",
+    "simple_cam_16": "CAM"
+}

@@ -1,0 +1,32 @@
+### Module Behavior and Property Meaning
+This module counts how many times a signed input j satisfies 1 <= j < 200, and adds each such j to a sum i, as long as i < 200.
+
+- i: accumulates eligible j values.
+- k: counts how many such values were processed.
+
+At each positive clock edge:
+- If i < 200 and 1 <= j < 200, then:
+    - i is incremented by j
+    - k is incremented by 1
+
+This continues as long as i is less than 200.
+The property asserts that k never exceeds 200. Since each increment of k is tied to adding a j >= 1 to i, and i stops accumulating once it reaches 200, k must remain ≤ 200.
+
+### Proposed Lemmas:
+We propose a lemma which strengthens the property by adding the invariant k <= i.
+Every time k is incremented, at least 1 is added to i, so i grows at least as fast as k.
+
+The property alone (k <= 200) is not 1-inductive. The lemma is 1-inductive, and hence might be easier to prove directly.
+It connects k and i, establishing that k <= i, and since i < 200 is the guard for continuing the process, this implies that k must also remain below 200.
+
+### JSON Block:
+
+<json>
+{
+   "lemmas": [
+       {
+           "lemma_1": "property lemma_1; @(posedge clk) disable iff (rst) k <= 200 && k <= i; endproperty"
+       }
+   ]
+}
+</json>
