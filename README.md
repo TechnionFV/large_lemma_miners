@@ -73,4 +73,4 @@ export ARTIFACT_DATA_DIR=/path/to/extracted/artifact
 ./generate_tables.sh --replay
 ```
 
-This iterates over all `(model, pipeline, fewshot, num_iterations)` configurations and replays them from the cached LLM/evaluation responses. The outputs should match Level 1 exactly.
+This iterates over all `(model, pipeline, fewshot, num_iterations)` configurations and replays them from the cached LLM/evaluation responses.
