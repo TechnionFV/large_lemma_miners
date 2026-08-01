@@ -355,7 +355,7 @@ def json_to_latex_table(
         elif isinstance(vb_raw, (int, float)):
             if vb_raw > 3600:
                 print(
-                    f"design {design} took {vb_raw:.2f} seconds (>3600); marking TIMEOUT†"
+                    f"[INFO] design {design} took {vb_raw:.2f} seconds (>3600); marking TIMEOUT†"
                 )
                 vb = _TIMEOUT_SLOW
             else:
@@ -888,15 +888,15 @@ def build_table3_from_runs(
             unsolved_counts[tag] += 1
             unsolved_list.append({"module": module, "tag": tag})
 
-    print(f"modules that were not solved by any setting: {unsolved_list}")
-    print(f"counts: {dict(solved_counts)}")
-    print(f"counts: {dict(unsolved_counts)}")
+    print(f"[INFO] modules that were not solved by any setting: {unsolved_list}")
+    print(f"[INFO] solved counts by category: {dict(solved_counts)}")
+    print(f"[INFO] unsolved counts by category: {dict(unsolved_counts)}")
 
     table_str = _latex_category_table(solved_counts, unsolved_counts)
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(table_str, encoding="utf-8")
-    print(f"LaTeX table written to {out_path}")
+    print(f"[OK] LaTeX table written to {out_path}")
 
 
 # ---------------------------------------------------------------------------
@@ -1112,10 +1112,8 @@ def build_num_iterations_ablation_plots(
     plt.rcParams.update({"font.size": 18})
     fig, ax = plt.subplots(figsize=(12, 6))
 
-    import matplotlib.cm as cm
-
     model_colors = {}
-    cmap = cm.get_cmap("tab10", len(model_order))
+    cmap = plt.get_cmap("tab10", len(model_order))
     for i, model in enumerate(model_order):
         model_colors[model] = cmap(i)
 

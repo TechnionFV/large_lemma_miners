@@ -35,8 +35,11 @@ from __future__ import annotations
 import argparse
 import contextlib
 import os
+import re
 import sys
 from pathlib import Path
+
+from tqdm import tqdm
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -166,7 +169,25 @@ def main() -> None:
 
     _check_data_roots(data_root / "main_experiment", data_root / "hard")
 
+    # One stage for data ingestion plus one per selected table. The progress
+    # bar writes to stderr (the console); every print() from the builders is
+    # captured in build.log via the stdout redirect below.
+    stages = ["ingest"] + [t for t in ALL_TABLES if t in selected]
+    pbar = tqdm(
+        total=len(stages),
+        desc="get_tables",
+        unit="stage",
+        position=0,
+        dynamic_ncols=True,
+        file=sys.stderr,
+    )
+
+    def _begin_stage(name: str) -> None:
+        pbar.set_description(f"[{name}]")
+        print(f"\n===== stage: {name} =====")  # goes to build.log
+
     with _redirect_stdout_to(log_path):
+        _begin_stage("ingest run data")
         runs_json = build_runs_json(
             data_root=data_root,
             selection=_ingestion_selection(),
@@ -185,11 +206,15 @@ def main() -> None:
             agent_num_iterations=MAIN_NUM_ITERATIONS,
             non_agent_num_samples=NUM_SAMPLES,
         )
+        pbar.update(1)
 
         if "overall" in selected:
+            _begin_stage("overall table")
             build_table1_from_runs(main_runs, out_dir=tables_dir)
+            pbar.update(1)
 
         if "timings" in selected:
+            _begin_stage("timings table")
             build_table2_from_runs(
                 main_runs,
                 out_dir=tables_dir,
@@ -197,14 +222,18 @@ def main() -> None:
                 hard_tags_path=hard_tags_path,
                 fewshot_variants=[(sorted(MAIN_FEWSHOTS), "all")],
             )
+            pbar.update(1)
 
         if "categories" in selected:
+            _begin_stage("categories table")
             build_table3_from_runs(
                 main_runs,
                 out_path=tables_dir / "solved_unsolved_by_category.latex",
             )
+            pbar.update(1)
 
         if "fewshot-ablation" in selected:
+            _begin_stage("fewshot ablation table")
             fewshot_ablation_runs = filter_runs(
                 runs_json,
                 fewshots=ALL_FEWSHOTS,
@@ -217,8 +246,10 @@ def main() -> None:
                 coarse_out_tex=tables_dir / "fewshot_ablation.tex",
                 fewshots=ALL_FEWSHOTS,
             )
+            pbar.update(1)
 
         if "iterations-ablation" in selected:
+            _begin_stage("iterations ablation plot")
             iterations_runs = filter_runs(
                 runs_json,
                 fewshots=MAIN_FEWSHOTS,
@@ -230,7 +261,21 @@ def main() -> None:
                 non_agent_num_samples=NUM_SAMPLES,
                 out_dir=plots_dir,
             )
+            pbar.update(1)
 
+    pbar.set_description("done")
+    pbar.close()
+
+    # Surface a one-line summary of anything noteworthy captured in the log.
+    log_text = log_path.read_text(encoding="utf-8")
+    n_warnings = len(re.findall(r"^\[WARNING\]", log_text, flags=re.MULTILINE))
+    n_infos = len(re.findall(r"^\[INFO\]", log_text, flags=re.MULTILINE))
+    print(
+        f"Build log: {log_path} "
+        f"({n_warnings} warning(s), {n_infos} info message(s))"
+    )
+
+    print("Outputs:")
     all_outputs = (
         _collect_files(tables_dir)
         + _collect_files(plots_dir)

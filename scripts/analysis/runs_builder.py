@@ -28,6 +28,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
 
+from tqdm import tqdm
+
 # Allow direct-script invocation (`python3 runs_builder.py`) by bootstrapping
 # this file as a member of the `analysis` package so its relative imports
 # (and the relative imports of its siblings, e.g. `analysis_utils`) resolve.
@@ -455,7 +457,14 @@ def build_runs_json(
     # modules_touched[run_key] = set of modules covered by this run
     modules_touched: Dict[str, set] = defaultdict(set)
 
-    for rec in summary_records:
+    for rec in tqdm(
+        summary_records,
+        desc="  Ingesting run summaries",
+        unit="file",
+        leave=False,
+        position=1,
+        dynamic_ncols=True,
+    ):
         # ids emitted by collect_summary_files are "<short_model>_agentic" or
         # "<short_model>_non_agentic"; check the suffix explicitly.
         pipeline = "non_agent" if rec["id"].endswith("_non_agentic") else "agent"
@@ -521,6 +530,7 @@ def build_runs_json(
     # -- step 2: per-log timings
     # Pre-build a map from (experiment, model_full, fewshot, N_value) → run_key
     # so log-filename parsing can cheaply identify the right run.
+    all_log_paths: List[Path] = []
     for experiment_root in experiment_roots:
         experiment = experiment_root.name
         if experiment not in selection.experiments:
@@ -530,51 +540,58 @@ def build_runs_json(
             if not logs_dir.is_dir():
                 continue
             for log_path in sorted(logs_dir.iterdir()):
-                if not log_path.is_file() or log_path.suffix != ".log":
-                    continue
-                desc = _parse_agent_log_name(log_path.name) or _parse_nonagent_log_name(
-                    log_path.name
+                if log_path.is_file() and log_path.suffix == ".log":
+                    all_log_paths.append(log_path)
+
+    for log_path in tqdm(
+        all_log_paths,
+        desc="  Parsing timing logs",
+        unit="log",
+        leave=False,
+        position=1,
+        dynamic_ncols=True,
+    ):
+        desc = _parse_agent_log_name(log_path.name) or _parse_nonagent_log_name(
+            log_path.name
+        )
+        if desc is None:
+            continue
+        if desc["experiment"] not in selection.experiments:
+            continue
+        if not selection.fewshot_allowed(desc["fewshot"]):
+            continue
+        if not selection.model_allowed(desc["model"]):
+            continue
+
+        # Respect the K / ns selection policy.
+        if desc["pipeline"] == "agent":
+            if not selection.agent_num_iterations_allowed(desc["num_iterations"]):
+                continue
+        else:
+            if not selection.non_agent_num_samples_allowed(desc["ns"]):
+                continue
+
+        rk = _log_run_key(desc)
+        timings = _parse_log_timings(log_path)
+        for module, t in timings.items():
+            per_run = runs_by_module.get(module, {}).get(rk)
+            if per_run is None:
+                # Log mentions a module the summary didn't record; skip it.
+                continue
+            per_run["inference_time"] = (
+                round(t["inference_time"], 6) if t["saw_inf"] else None
+            )
+            per_run["evaluation_time"] = (
+                round(t["evaluation_time"], 6) if t["saw_eval"] else None
+            )
+            if t["saw_inf"] or t["saw_eval"]:
+                per_run["total_time"] = round(
+                    (t["inference_time"] if t["saw_inf"] else 0.0)
+                    + (t["evaluation_time"] if t["saw_eval"] else 0.0),
+                    6,
                 )
-                if desc is None:
-                    continue
-                if desc["experiment"] not in selection.experiments:
-                    continue
-                if not selection.fewshot_allowed(desc["fewshot"]):
-                    continue
-                if not selection.model_allowed(desc["model"]):
-                    continue
-
-                # Respect the K / ns selection policy.
-                if desc["pipeline"] == "agent":
-                    if not selection.agent_num_iterations_allowed(
-                        desc["num_iterations"]
-                    ):
-                        continue
-                else:
-                    if not selection.non_agent_num_samples_allowed(desc["ns"]):
-                        continue
-
-                rk = _log_run_key(desc)
-                timings = _parse_log_timings(log_path)
-                for module, t in timings.items():
-                    per_run = runs_by_module.get(module, {}).get(rk)
-                    if per_run is None:
-                        # Log mentions a module the summary didn't record; skip it.
-                        continue
-                    per_run["inference_time"] = (
-                        round(t["inference_time"], 6) if t["saw_inf"] else None
-                    )
-                    per_run["evaluation_time"] = (
-                        round(t["evaluation_time"], 6) if t["saw_eval"] else None
-                    )
-                    if t["saw_inf"] or t["saw_eval"]:
-                        per_run["total_time"] = round(
-                            (t["inference_time"] if t["saw_inf"] else 0.0)
-                            + (t["evaluation_time"] if t["saw_eval"] else 0.0),
-                            6,
-                        )
-                    per_run["tokens"] = round(t["tokens"], 3) if t["saw_tok"] else None
-                    per_run["source"]["log"] = str(log_path)
+            per_run["tokens"] = round(t["tokens"], 3) if t["saw_tok"] else None
+            per_run["source"]["log"] = str(log_path)
 
     # -- step 3: aggregate summaries → _run_totals
     agent_agg, non_agg = _discover_aggregate_files(experiment_roots, selection)
@@ -745,7 +762,7 @@ def build_runs_json(
 
     n_runs = sum(len(m["runs"]) for k, m in result.items() if not k.startswith("_"))
     print(
-        f"Wrote runs.json: {len(runs_by_module)} modules, "
+        f"[OK] Wrote runs.json: {len(runs_by_module)} modules, "
         f"{n_runs} per-(module,run) records, "
         f"{len(run_totals)} _run_totals entries → {out_path}"
     )

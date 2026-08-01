@@ -27,18 +27,19 @@ The verification backend (EBMC) is only needed for live runs; both reproduction 
 
 ## Artifact Data (Zenodo)
 
-Download the artifact archive from Zenodo and extract it. The archive contains:
+The artifact archive is published on Zenodo: <https://zenodo.org/records/20832562> (DOI: [10.5281/zenodo.20832562](https://doi.org/10.5281/zenodo.20832562)).
+
+Download `artifact.tar.gz` (~835 MB) and extract it; it unpacks to an `artifact/` directory containing:
 
 | Directory | Contents |
 |-----------|----------|
 | `main_experiment/` | Per-run directories with LLM caches, eval caches, and result summaries |
 | `hard/` | Same structure for the hard benchmark subset |
-| `cactus/` | Per-module cactus timing caches |
 
-Set the environment variable to point at the extracted directory:
+Set the environment variable to point at the extracted `artifact/` directory:
 
 ```bash
-export ARTIFACT_DATA_DIR=/path/to/extracted/artifact
+export ARTIFACT_DATA_DIR=/path/to/artifact
 ```
 
 ---
