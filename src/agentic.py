@@ -37,6 +37,10 @@ class LLMAgent:
         clear=False,
         ebmc_timeout=120,
         time_budget_s=None,
+        work_dir=None,
+        fewshot_selection="live",
+        cache_read_only=False,
+        fail_on_cache_miss=False,
     ):
         self.module_file = module_file
         self.file_basename = os.path.splitext(os.path.basename(self.module_file))[0]
@@ -45,6 +49,7 @@ class LLMAgent:
         self.initial_template = initial_template
         self.repair_template = repair_template
         self.few_shot = few_shot
+        self.fewshot_selection = fewshot_selection
         self.counter = 0
         self.output_file_prefix = output_file_prefix
         self.num_iterations = num_iterations
@@ -57,6 +62,8 @@ class LLMAgent:
             cache_mode=cache_mode,
             init_cache_with_no_cache_mode=True,
             timeout=ebmc_timeout,
+            cache_read_only=cache_read_only,
+            fail_on_cache_miss=fail_on_cache_miss,
         )
         self.show_cex = show_cex
         self.proposed_lemmas = []
@@ -74,6 +81,13 @@ class LLMAgent:
         self.clear = clear
         self.storage_dir = storage_dir
         self.llm_cache = llm_cache
+        self.cache_read_only = cache_read_only
+        self.work_dir = os.path.abspath(
+            work_dir
+            if work_dir is not None
+            else os.path.join(storage_dir, ".agent-prompts")
+        )
+        os.makedirs(self.work_dir, exist_ok=True)
         # Timing state (populated in converse())
         self.logical_elapsed_s = 0.0
         self.iteration_times_s = []
@@ -101,27 +115,30 @@ class LLMAgent:
         return message_error + json_format_reminder
 
     def _get_next_json_filename(self):
-        base_dir = os.path.join(ROOT_DIR, "scripts/agent_jsons")
-        os.makedirs(base_dir, exist_ok=True)
         basename = f"{self.output_file_prefix}_{self.model_name}_{self.file_basename}_{self.counter}.json"
-        return os.path.join(base_dir, basename)
+        return os.path.join(self.work_dir, basename)
 
     def _create_initial_prompt(self):
         output_file = self._get_next_json_filename()
         # few_shot = True if self.few_shot > 0 else False
-        create_json(
-            embedding_model=self.embedding_model,
-            template_file=self.initial_template,
-            module_file=self.module_file,
-            model_name=self.model_name,
-            output_file=output_file,
-            few_shot=self.few_shot,
-        )
+        try:
+            create_json(
+                embedding_model=self.embedding_model,
+                template_file=self.initial_template,
+                module_file=self.module_file,
+                model_name=self.model_name,
+                output_file=output_file,
+                few_shot=self.few_shot,
+                fewshot_selection=self.fewshot_selection,
+            )
 
-        with open(output_file, "r") as f:
-            data = json.load(f)
+            with open(output_file, "r") as f:
+                data = json.load(f)
 
-        return [{"role": "user", "content": data["prompt"]}]
+            return [{"role": "user", "content": data["prompt"]}]
+        finally:
+            if os.path.exists(output_file):
+                os.remove(output_file)
 
     """ Returns the path to a JSON file containing the prompt parameters, formatted for compatibility with prompt_llms"""
 
@@ -164,6 +181,7 @@ class LLMAgent:
                 cache=self.llm_cache,
                 force_cached=self.force_cached,
                 clear=self.clear,
+                cache_read_only=self.cache_read_only,
             )
         except ValueError as e:
             print(f"[Error]: {e}")

@@ -3,3 +3,4 @@ matplotlib>=3.10
 numpy
 pandas>=2.3
 tqdm
+sentence-transformers==5.1.0

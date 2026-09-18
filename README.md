@@ -70,7 +70,46 @@ The run results in the artifact data can also be recomputed from scratch. This l
 
 ```bash
 export ARTIFACT_DATA_DIR=/path/to/extracted/artifact
-./generate_tables.sh --replay
+./generate_tables.sh --replay --workers 6 /path/to/new-replay-directory
 ```
 
-This iterates over all `(model, pipeline, fewshot, num_iterations)` configurations and replays them from the cached LLM/evaluation responses.
+`--workers N` defaults to 1 and requires a positive integer. Replay runs the
+same 792 configurations as the paper artifact in a bounded worker pool. Every
+configuration has a stable ID, private workspace/output staging area, and
+separate log under `results/metadata/replay-logs/`.
+
+The results directory must be new unless `--allow-existing-results` is passed
+explicitly. Normal fresh replay does not need that option.
+
+An interrupted replay can be continued without weakening that protection:
+
+```bash
+export ARTIFACT_DATA_DIR=/path/to/extracted/artifact
+./generate_tables.sh --replay --resume --workers 6 /path/to/interrupted-replay
+```
+
+Resume validates the manifest, all completed outputs, and the read-only cache
+snapshot. Completed jobs are skipped; interrupted attempts are archived under
+`results/metadata/replay-attempts/` and retried in private workspaces.
+
+## Deterministic Few-shot Selection
+
+`data/fewshot_selection.json` stores the five nearest examples and cosine
+similarities for every main and hard benchmark module. Keys are repository-
+relative paths. Metadata records the pinned
+`sentence-transformers/all-mpnet-base-v2` revision, sentence-transformers
+version, maximum `k`, and SHA-256 hashes of benchmark modules and few-shot
+inputs.
+
+Replay automatically uses this cache for few-shot settings 1–5, so it does not
+import or load the embedding model. Missing entries, changed inputs, or
+requests above the cached maximum are errors. Ordinary experiments retain live
+selection via `scripts/entry_point.py --fewshot-selection live`; cached
+selection can be selected explicitly with:
+
+```bash
+python scripts/entry_point.py \
+  --fewshot-selection cached \
+  --fewshot-selection-cache data/fewshot_selection.json \
+  ...
+```

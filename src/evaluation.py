@@ -2,12 +2,12 @@ import subprocess
 import re
 import os
 from enum import Enum
-from diskcache import Cache
 import hashlib
 from typing import List, Union
 import time
 import copy
 import logging
+from cache_utils import open_cache
 
 ebmc_executable = os.getenv("EBMC_PATH", "ebmc")
 
@@ -243,6 +243,8 @@ class LemmaEvaluator:
         init_cache_with_no_cache_mode=True,
         only_singletons=False,
         timeout=EBMC_TIMEOUT,
+        cache_read_only=False,
+        fail_on_cache_miss=False,
     ):
         if tool not in ["jg", "ebmc"]:
             raise ValueError(
@@ -257,9 +259,14 @@ class LemmaEvaluator:
         if self.cache == None and (
             cache_mode != CacheMode.NO_CACHE or init_cache_with_no_cache_mode
         ):
-            self.cache = Cache(os.path.join(storage_dir, "eval_cache"))
+            self.cache = open_cache(
+                os.path.join(storage_dir, "eval_cache"),
+                read_only=(cache_read_only or cache_mode == CacheMode.FORCE_CACHED),
+            )
 
-        self.cache_result = cache_result
+        self.cache_read_only = cache_read_only or cache_mode == CacheMode.FORCE_CACHED
+        self.cache_result = cache_result and not self.cache_read_only
+        self.fail_on_cache_miss = fail_on_cache_miss
         self.skip_correctness = skip_correctness
         self.cache_mode = cache_mode
         self.only_singletons = only_singletons
@@ -411,6 +418,8 @@ class LemmaEvaluator:
         return results
 
     def _cache_result(self, lemmas: list, mode: str, res: dict, engine: str):
+        if self.cache_read_only:
+            raise RuntimeError("Cannot write to a read-only evaluation cache")
         cache_key = self._hash_query(lemmas, mode, engine)
         assert res["verification_result"] != VerificationResult.UNCACHED
         if not cache_key:
@@ -493,6 +502,12 @@ class LemmaEvaluator:
                     return self._strip_unused_trace(full_res, trace)
 
             elif self.cache_mode == CacheMode.FORCE_CACHED:
+                if self.fail_on_cache_miss:
+                    raise RuntimeError(
+                        "Evaluation cache miss for "
+                        f"module={self.module.module_name} mode={mode} "
+                        f"engine={engine}"
+                    )
                 return {
                     "verification_result": VerificationResult.UNCACHED,
                     "time": float("inf"),

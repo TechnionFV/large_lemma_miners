@@ -8,6 +8,11 @@ from evaluation import CacheMode, cachemode_type
 from models import MODEL_SHORT_TO_FULL, MODEL_FULL_TO_SHORT
 from experiment_agentic import experiment_agentic
 from evaluate_non_agentic import evaluate_non_agentic
+from fewshot.few_shot import (
+    SelectionCacheError,
+    load_fewshot_selection_cache,
+    validate_selection_cache_for_modules,
+)
 
 
 if __name__ == "__main__":
@@ -68,6 +73,27 @@ if __name__ == "__main__":
         default=None,
     )
     parser.add_argument(
+        "-work_dir",
+        help="Job-local directory for temporary prompts",
+        default=None,
+    )
+    parser.add_argument(
+        "--fewshot-selection",
+        choices=["live", "cached"],
+        default="live",
+        help="Select examples with live embeddings or a validated cache",
+    )
+    parser.add_argument(
+        "--fewshot-selection-cache",
+        default=os.path.join(ROOT_DIR, "data", "fewshot_selection.json"),
+        help="Path to the permanent few-shot selection cache",
+    )
+    parser.add_argument(
+        "--replay-read-only",
+        action="store_true",
+        help="Strict forced-cache replay: disable all cache writes and fail on misses",
+    )
+    parser.add_argument(
         "-num_samples", help="How many response samples to extract lemmas from"
     )
     parser.add_argument(
@@ -94,6 +120,26 @@ if __name__ == "__main__":
     args = parser.parse_args()
     experiment = os.path.basename(args.modules_dir)
     args.num_iterations = int(args.num_iterations)
+    if args.replay_read_only:
+        if not args.force_cached or args.evaluation_cache_mode != CacheMode.FORCE_CACHED:
+            parser.error(
+                "--replay-read-only requires --force_cached and "
+                "-evaluation_cache_mode FORCE_CACHED"
+            )
+        if args.few_shot > 0 and args.fewshot_selection != "cached":
+            parser.error(
+                "--replay-read-only with few-shot prompts requires "
+                "--fewshot-selection cached"
+            )
+
+    if args.few_shot > 0 and args.fewshot_selection == "cached":
+        try:
+            load_fewshot_selection_cache(args.fewshot_selection_cache)
+            validate_selection_cache_for_modules(
+                args.modules_dir, k=args.few_shot
+            )
+        except SelectionCacheError as exc:
+            parser.error(str(exc))
     job_storage_path = os.path.join(
         args.storage_dir,
         experiment,
@@ -110,6 +156,8 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(job_output_path, "results"), exist_ok=True)
     os.makedirs(os.path.join(job_output_path, "results", "summaries"), exist_ok=True)
     os.makedirs(os.path.join(job_output_path, "results", "logs"), exist_ok=True)
+    work_dir = args.work_dir or os.path.join(job_output_path, "work")
+    os.makedirs(work_dir, exist_ok=True)
 
     if args.num_samples is None:
         args.num_samples = 5
@@ -153,6 +201,10 @@ if __name__ == "__main__":
             ebmc_timeout=args.ebmc_timeout,
             cactus_cache_root=args.cactus_cache_root,
             time_budget_s=args.time_budget_s,
+            work_dir=work_dir,
+            fewshot_selection=args.fewshot_selection,
+            cache_read_only=args.replay_read_only,
+            strict_replay=args.replay_read_only,
         )
     else:
         evaluate_non_agentic(
@@ -166,4 +218,8 @@ if __name__ == "__main__":
             skip_prompts_creation=args.skip_prompts_creation,
             few_shot=args.few_shot,
             ebmc_timeout=args.ebmc_timeout,
+            work_dir=work_dir,
+            fewshot_selection=args.fewshot_selection,
+            cache_read_only=args.replay_read_only,
+            strict_replay=args.replay_read_only,
         )

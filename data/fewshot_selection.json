@@ -1,0 +1,2895 @@
+{
+  "metadata": {
+    "benchmark_input_hashes": {
+      "benchmarks/hard/buffer_128_ebmc.sv": "507d460614dd9e71834adb16228c3b07e40bb5a9109d0710367cb225fbbb7fe8",
+      "benchmarks/hard/buffer_32_ebmc.sv": "a43d46dc874a7a0d765835531a95d3e138dbebcdcd0f2750bca64c2b5633e89e",
+      "benchmarks/hard/buffer_64_ebmc.sv": "36abdbaadd9ed83ea182151867124c22bda8b50b6790b694baf45dffc4978590",
+      "benchmarks/hard/counter_66_ebmc.sv": "77b1bb425d8863aa27c798c65edde548f2baba1ec565ea7dd3bf2fac269f9b92",
+      "benchmarks/hard/dp_ebmc.sv": "de758a43c6125b8e048c31151ba91077864156ec85bd7b9394b4d95bb2a97b3e",
+      "benchmarks/hard/ex15_ebmc.sv": "7f532d57743b94ae2c254bd2fdb4b20abc1839e0d8ff9d6861af4f403be6bd42",
+      "benchmarks/hard/ex3_ebmc.sv": "7bb7290a87a6293af540bdae14e8dc690fa1a107de36e0fb8c7f250c4c1c9fca",
+      "benchmarks/hard/ex4_ebmc.sv": "418a6eb634a0908188fc6672b2ed68e2c19bd65bf28206f143016a3397778aad",
+      "benchmarks/hard/ex51_57_1_ebmc.sv": "dcf65359847ae479d63e286c6d789b729e1d54cead69636f1e8a77546e62ff34",
+      "benchmarks/hard/ex51_ebmc.sv": "7e8fc21b75e94261f053ee774b2c685640d143eba073550f829073a7cd6feaf8",
+      "benchmarks/hard/ex80_ebmc.sv": "015167af781dc767c76403b9f275363b2260b76a60387c24d35659ae6456463d",
+      "benchmarks/hard/fifo_ref_16_ebmc.sv": "312eaeb277f14a7f1b287cd04ae555125e3b839a61600495d99490dfbd10de1c",
+      "benchmarks/hard/fifo_ref_64_ebmc.sv": "2d0d2e706b441a87c47c7e5b4f30ee87a1ae7b4303ed1965b79020330bdca55d",
+      "benchmarks/hard/fifo_vis.sv": "4a94e6b07fb63a1efaeb9fc2ff307c565ea92febcd330638751d3ad6bde742ca",
+      "benchmarks/hard/gr2006_ebmc.sv": "c9d6e2f6dcd0a0816902b532066b3db0f05a610172ecb24340de2b1de6251cd9",
+      "benchmarks/hard/gulwani_cegar2_1_ebmc.sv": "cc1429a3f536a80318eeee733815eb1c7bf976cb629de5bf4f1dbf60f78b8cb3",
+      "benchmarks/hard/gulwani_cegar2_2_ebmc.sv": "ecf9151691dac05e502f6814b05416bb5a5275b3c9731e9d9449e6c232ce10ae",
+      "benchmarks/hard/gulwani_cegar2_3_ebmc.sv": "4b4e32147137cd62daff15f239405a6202dea16211176fafb83f1c6fa8fe2a48",
+      "benchmarks/hard/gulwani_cegar2_4_ebmc.sv": "2246090ea4960c588107835423a5e416596ddb026d1293529cfbbd47b76cb0ac",
+      "benchmarks/hard/gulwani_cegar2_5_ebmc.sv": "1116bbfd03ba2dbdede8ff4cde31fbc4440d5c4bf79d48cf9828d06565061b0a",
+      "benchmarks/hard/gulwani_cegar2_ebmc.sv": "a1c71d4f9cb2cec97a285db18b23b485b6b0413f94ed65825312e8a85483bf6f",
+      "benchmarks/hard/gulwani_fig1a_2_ebmc.sv": "3bb60b34ab2a706ddb0c77e486eb685e8b6191c560acdcd70e381b04edd54238",
+      "benchmarks/hard/gulwani_fig1a_4_ebmc.sv": "a0dfeffc594a415d3dbe5d692e9234b731a8df421030f74e558b16f474675624",
+      "benchmarks/hard/gulwani_fig1a_5_ebmc.sv": "b84cdd2196b33b78439df7f53abd7a2a8314d3e03406e0e5563cfe1afb957760",
+      "benchmarks/hard/gulwani_fig1a_6_ebmc.sv": "254fd3c080138073a37039dffc4e0cf805ab6b34c4005ea192a704020015dd25",
+      "benchmarks/hard/gulwani_fig1a_ebmc.sv": "51391f6ebde0cb8a76c2f0b75938f236793d2276b8944c7527b746b4a0173506",
+      "benchmarks/hard/lrg_arb_lrg_16_ebmc.sv": "ead38cc1046af1792f852f9777226abe9cd7641736daf9df37e7e1f2fd30212e",
+      "benchmarks/hard/lrg_arb_lrg_4_ebmc.sv": "77c2c69a64c19c0172f4fbf0097c14fa8d997a0797361f54d19f43434e063661",
+      "benchmarks/hard/lrg_arb_lrg_8_ebmc.sv": "f3eb32fced78661ea7489f9bec3422f6c047bded76fedefdfcb189a54fc10d70",
+      "benchmarks/hard/simple_cam_16_ebmc.sv": "464547d28d9e1e6e766aec32b86c3bcd6856c4d79966fdc7ea8d4c74cf300785",
+      "benchmarks/hard/simple_cam_8_ebmc.sv": "714388af750e15236ff4945f12f4f80dae8a98a1c16da313760e50cc8df18376",
+      "benchmarks/main_experiment/Barrel.sv": "17fbc55fe13d35d6c3f7ff53fec021097fc9713c9cd57623ea52097dc4112ebd",
+      "benchmarks/main_experiment/Rrobin_p4.sv": "5df3cddeed5c102488d6b9519c391378383918e253580b5e92022f9d413bf2e5",
+      "benchmarks/main_experiment/am2910_p1.sv": "b1dcffca46f0c9a846cdb7bd87a412dc96896af61b041f90a0805833c5401efc",
+      "benchmarks/main_experiment/am2910_p2.sv": "975c9ce55fe0923527a95bc22ade56e7190d50f969d1830e11bda16cc4aa17ed",
+      "benchmarks/main_experiment/am2910_p3.sv": "5a3531766f341fac8e636cfb2ad6a2a15a4c4cd9d9f1c939d8ca5795ff3a6299",
+      "benchmarks/main_experiment/ar.sv": "1867007465d79bb0433837905d1dd3ca579a0979f41ad246e5409f4676eb4fc0",
+      "benchmarks/main_experiment/b01.sv": "bad5dfae33be04ee0eca594b4832303d5e79d6f6f601b3783ba9430b33027262",
+      "benchmarks/main_experiment/b02_p1.sv": "1ccfc95fc14b1fea46afc2bd8be4694c50f58bb205efdf461b528524dcf10d0d",
+      "benchmarks/main_experiment/b02_p2.sv": "445569967e910ebf5e60728e29604df55da5e8a653fa5858a24fb25726f590a6",
+      "benchmarks/main_experiment/b03.sv": "30449105568dd781eba88335eda4cbd393448cb348b49ccdc45c24900d25e72d",
+      "benchmarks/main_experiment/bit-vector.sv": "a41e07ee5d7a7ecae498d8fef66ae8ee4ed171fe6c7a63f6e1d1bfd6ae38d368",
+      "benchmarks/main_experiment/brs1_1_1.sv": "cc081d0ec2c1c1b61643178a1a2e3571e7eabf8740ea57d2490b6373b4277941",
+      "benchmarks/main_experiment/brs1_1_2.sv": "f78a957f194023e6b5d7b4ad275b2658c4aa44acd86d2fb1bf0fe3ed62d786f7",
+      "benchmarks/main_experiment/brs1_1_3.sv": "5a047816ad7cdd9f259f84f5001901129c7e8a2f55b4fac120253da4c62283df",
+      "benchmarks/main_experiment/brs1_1_4.sv": "390d54d6a0a6566677a9bba5054344d8c756fbe1788d15a0ab62d1622156a4ee",
+      "benchmarks/main_experiment/brs1_1_5.sv": "90c3e78c045d959aa24e3953578a5eca1aadb164b248f62ac23a59c1f8fbad4a",
+      "benchmarks/main_experiment/brs1_2_1.sv": "57b6dfd8491f8bf45f8a2aebe40c85c5a9b4b3c3f8702e1a5b493c50a3ff7ccd",
+      "benchmarks/main_experiment/brs1_2_2.sv": "844dad385f42302b2f2ed6bbade4a5d07f0482347e919f2867dd6ae0bee1a9ed",
+      "benchmarks/main_experiment/brs1_2_3.sv": "20e32e58ed3919f87e459a2a15c16627ee8538bb64d4692f2434aa4e82b197bb",
+      "benchmarks/main_experiment/brs1_2_4.sv": "2e382fabb75b0a7630189b5139e025439017bf126d2ed0723647a04f13d88f91",
+      "benchmarks/main_experiment/brs1_2_5.sv": "aaf311e62616b59dbeed58a89b00bf04b9c9ef3b25132fa7e9a9859705da810f",
+      "benchmarks/main_experiment/bufferAlloc.sv": "9dbbf4af9c33c5014840d5b83c93f309e93680ff3e17db2671b015212cd221e2",
+      "benchmarks/main_experiment/edgeDetectors.sv": "2c67ee5dd02655906a90bbdea6cbedc74050ddc921c08a864c89228efd33f4f8",
+      "benchmarks/main_experiment/ethernet.define.112_vcegar_p5.sv": "d7c7b6cddcdc21c6670865906ca6b8c7249cf63fc362eb314c2fb7784527e483",
+      "benchmarks/main_experiment/ex1.sv": "7fe77bb0800c3525f0a8cbf52cc0391267c645febf115499a0282aea37782032",
+      "benchmarks/main_experiment/ex100.sv": "c38bdf3f25b354dde4794d9cf9229a638ed82ac2f6683e46a902255a8b615908",
+      "benchmarks/main_experiment/ex2.sv": "99ff60dfc4c2107cb9c059bbbc8909f742b95e6d8586a20e0d009a9b5bef5865",
+      "benchmarks/main_experiment/ex34.sv": "0f236fb74692a3ab45395a658751491e81dce1b7b816ca2b7fc63bdf8a1a721d",
+      "benchmarks/main_experiment/ex34_30.sv": "c79e9e4c98f2cd320da51f4b9ac6f75da4808c0fa41d05dcbe1e7c761dad4203",
+      "benchmarks/main_experiment/ex5.sv": "6584679d6a2c1940558c062b88badc9d7218285aef838c6b2152f47be8ad2d27",
+      "benchmarks/main_experiment/ex51_a.sv": "62c30d40da79d699845fd36831bf76d12631eceb82b30f2d481393116ebe7413",
+      "benchmarks/main_experiment/ex6.sv": "ba77a2faa5061e2c7138a70e57e30a43703b77c093c8f30ba7b7fd95d9ed6dd1",
+      "benchmarks/main_experiment/ex65.sv": "53c1d979ccdc6dcb73d20480d255ce4f4f42022ddae54243ff53249611937c8a",
+      "benchmarks/main_experiment/ex7.sv": "c0e726dd17bb1cbecede0e132fd12a94f5fdb31d2bfcb94bb78f354076a7144b",
+      "benchmarks/main_experiment/ex8.sv": "91726d186c56abec014afe14ad1316440eaea74e03d7f9abe4401cd553ad4435",
+      "benchmarks/main_experiment/ex9.sv": "046234bd17377ff9e5778d0578cec4db2513d6eed3fd991e6131a9329374d9a9",
+      "benchmarks/main_experiment/ex90.sv": "fc5f4f860fca930195c97a851ddb068021a3653a5a466c64ccd43e6dcecf847c",
+      "benchmarks/main_experiment/gulwani_cegar1.sv": "99c5e1ff2e0d985cf2f155594c4d3e6fe71ff044d68284f63adf52cb561c6703",
+      "benchmarks/main_experiment/gulwani_cegar1_2.sv": "7dd4f546ed2b2d80c0ee714601d9becb9929a78fd340ac12071db94519821821",
+      "benchmarks/main_experiment/gulwani_cegar1_3.sv": "ec96be4445b41b035b3b982fbceb1631ff9c44ee9d531779f3e2566ecd858576",
+      "benchmarks/main_experiment/gulwani_cegar1_4.sv": "e6f5295202d75d4804ac8fc747cae5949a7ed8ff9cf0cec37ab1580c06dcfe8d",
+      "benchmarks/main_experiment/gulwani_cegar1_5.sv": "fa2f4d99f1741db0bad15bcacd70444a330c52da2d4ad545b638e0ee8f9561e2",
+      "benchmarks/main_experiment/gulwani_fig1a_3.sv": "61f8f67967c69db2da2b7c88ddbd1d6c3a39a972183e685ed1f244e0b0799fc2",
+      "benchmarks/main_experiment/h_Arbiter.sv": "b953df98de80d3107c05bd2de78e7fe9d81df7b0c797528070216b7aaa63c53e",
+      "benchmarks/main_experiment/h_Dekker.sv": "f1f537d5dab1ef3e84ebb08c04a8af4c029a58ede81af047dc1aa0c0da0b061f",
+      "benchmarks/main_experiment/h_TreeArb.sv": "618c700df772297ee88b1edfd5fdcc0af00ed015415d8db8ecb53d9caaec59eb",
+      "benchmarks/main_experiment/h_Vending.sv": "7bcccae8c12885f071ec93ff729fe6e12202c1d55be8d39dbbe4ec7cb3f42f9f",
+      "benchmarks/main_experiment/h_Vsa16_p1.sv": "4803fa4b7ae1b4cb7f99ca275c0d0bd3bb7f63beb0105061908e702b04813a05",
+      "benchmarks/main_experiment/h_Vsa16a_p5.sv": "a3ea3424d1596c671239a7dfd520b96bb925a5f0cbce00a15674b2d28a280279",
+      "benchmarks/main_experiment/icctl1_p2.sv": "07bdc8f4c81bbc692675e2457032ca4e8e318a1ce7460f4199005b2c3a9df156",
+      "benchmarks/main_experiment/icctl1_p3.sv": "72d7510beec66974852d021dbdacd28461b12497859218533cd6f538cb7da020",
+      "benchmarks/main_experiment/itc99_b13_1.sv": "b66b5b23870d7d4ccc03ce27a33732d94a3c9f45cda6617c4645c4ac79e5fa85",
+      "benchmarks/main_experiment/itc99_b13_10.sv": "35c42c31a5b3b45bd422894796e06995a8bc196989374cddc1cb0781eb56d8b1",
+      "benchmarks/main_experiment/itc99_b13_11.sv": "5a845d3ad4e095df326168e734c311ac64db13d436fd4b255011e73f8d2ba142",
+      "benchmarks/main_experiment/itc99_b13_13.sv": "73a8298ebe213578055a70c795280dae9ba96b6d45686e592ab95567b6023d67",
+      "benchmarks/main_experiment/itc99_b13_20.sv": "40e214a05ca06db6d3339e731d9e9f4685e1422544236a05c7c011d2e480836b",
+      "benchmarks/main_experiment/itc99_b13_21.sv": "52e8124802ff44ad2dd808203f09b4f65108c2b5307a6d4559520fc522925f62",
+      "benchmarks/main_experiment/itc99_b13_6.sv": "3ab105164002af20bac4365ed9c6cff2fc952e8eedfa459ad379f8a51b536cc1",
+      "benchmarks/main_experiment/itc99_b13_7.sv": "b9be713275435618751897421657d8d67b52dae9b841b11710c0caf226c30d5a",
+      "benchmarks/main_experiment/itc99_b13_9.sv": "9b55f9749a767e721e78bce183865be565005e6709395b947156577895a37087",
+      "benchmarks/main_experiment/lcd_5-s2.sv": "7d1484acafb9e05fee1b33819608f25dcbd2eac5710fbdfa9855c4f3a945e9dd",
+      "benchmarks/main_experiment/load_store_1-s1.sv": "c163055aa890bb34314f4d6bdafbdd99f0e93d31d549ccf6b66d47d73f6dc79d",
+      "benchmarks/main_experiment/mpeg_1.sv": "a340b81836e4b5a612804c17afaa6b29aa06ea4d1a75fd7ac1ba7d426e9d5a65",
+      "benchmarks/main_experiment/s1269b_p5.sv": "b9b09d66e49c222543bde69128e4f04ebbe18243a94ff58d3ce57a0f68a9d875",
+      "benchmarks/main_experiment/sdlx_control.sv": "db302f00e2e2b7d9b36006c4d68d6b658293c39264c783c6301f0f254b744d43",
+      "benchmarks/main_experiment/swap2.sv": "881d31c084e6f7ec11b7236fa89f9b38958ddd6f6a9d61b316080b825addc9b7",
+      "benchmarks/main_experiment/synabs.sv": "d05ac3c96dcf92e539f4ee2a86ec69370311656539d2f40fa2ffeebaf7eb2da1",
+      "benchmarks/main_experiment/three_processor_bin_2.sv": "ca057a2e944527f86b38fb9f12ffc6d8d97b067ba6da4a82471869e4043fa7f5",
+      "benchmarks/main_experiment/two_processor_bin_2.sv": "ab3cd062910e82c6df0b2e1d7922f3cc64a118dff6cb2ef692c95cd00abb7029",
+      "benchmarks/main_experiment/usb_phy_1.sv": "700d1ee774f53c136e038e19b43e5955ca91a0975bd24d16afb700883cd52a55",
+      "benchmarks/main_experiment/vMiim.sv": "1a896b75f35ebc37eed9edfb5baa950354989252df0b56426a159f7783a19586",
+      "benchmarks/main_experiment/vga_4-s1.sv": "2ae02c2592be272aca53e2303f9e7427141c358bdc2269e1843e5fb8c88e0bf0",
+      "benchmarks/main_experiment/vga_4-s2.sv": "1627997398125ab8b50bf71fd393c494b56a64bd2f0c206bce53e34013d59798",
+      "benchmarks/main_experiment/vsaR_p02.sv": "8b567cc3691ae9f2404373e535f9ad8538ba4b3722f79a3e825283a48f0694ea",
+      "benchmarks/main_experiment/vsaR_p06.sv": "f249da1b69ad61a65bdf805f8b1e8d8593776b540c63bc624b0fcaf7bfeffd44",
+      "benchmarks/main_experiment/vsaR_p07.sv": "0bbcf275742f45cc47f3b95c841db9f1668b3c8ed35014d3dcea2b5c7d173b85",
+      "benchmarks/main_experiment/vsaR_p11.sv": "ca02824510e3187d0598593b63224f3991b1323c4180e13833dabae76864f9e6",
+      "benchmarks/main_experiment/vsaR_p16.sv": "a6cd3a37ba184c3b156c04e3a7b60003fb91fdf5566139d4c079eb038233040d"
+    },
+    "embedding_model": {
+      "identifier": "sentence-transformers/all-mpnet-base-v2",
+      "revision": "e8c3b32edf5434bc2275fc9bab85f82640a19130"
+    },
+    "example_input_hashes": {
+      "fewshot/examples_raw/FIR.sv": "043c05cb8552a7e5257dbab604adfb793f72bcac994738d1fd666eb5ff6aaa98",
+      "fewshot/examples_raw/ar.sv": "1867007465d79bb0433837905d1dd3ca579a0979f41ad246e5409f4676eb4fc0",
+      "fewshot/examples_raw/arbiter.sv": "ebab3bffba664826ead834f91a53617314608ea44f5440c94700be6f39953aea",
+      "fewshot/examples_raw/brs1_1_3.sv": "5a047816ad7cdd9f259f84f5001901129c7e8a2f55b4fac120253da4c62283df",
+      "fewshot/examples_raw/brs1_2_2.sv": "844dad385f42302b2f2ed6bbade4a5d07f0482347e919f2867dd6ae0bee1a9ed",
+      "fewshot/examples_raw/ex1.sv": "7fe77bb0800c3525f0a8cbf52cc0391267c645febf115499a0282aea37782032",
+      "fewshot/examples_raw/ex100.sv": "c38bdf3f25b354dde4794d9cf9229a638ed82ac2f6683e46a902255a8b615908",
+      "fewshot/examples_raw/ex15.sv": "5af739cc2cbd1e4cefbf6a33a262f5457a7766d7a591c41205333bd2ed3b6508",
+      "fewshot/examples_raw/ex2.sv": "99ff60dfc4c2107cb9c059bbbc8909f742b95e6d8586a20e0d009a9b5bef5865",
+      "fewshot/examples_raw/ex3.sv": "f677e9d5606b6d8bf9a57cdb6c2f4066e739dc4a13c0a9c441aa72fd9ceef7e3",
+      "fewshot/examples_raw/ex34.sv": "0f236fb74692a3ab45395a658751491e81dce1b7b816ca2b7fc63bdf8a1a721d",
+      "fewshot/examples_raw/ex4.sv": "ff4d89fc5806f3ebb905650e6eb6f27c67773969ba3d3ffa346da3d95a4dfbaf",
+      "fewshot/examples_raw/ex5.sv": "6584679d6a2c1940558c062b88badc9d7218285aef838c6b2152f47be8ad2d27",
+      "fewshot/examples_raw/ex51_a.sv": "62c30d40da79d699845fd36831bf76d12631eceb82b30f2d481393116ebe7413",
+      "fewshot/examples_raw/ex6.sv": "fcaf8186069c6863f9ddee410da4467dd3058c2bfc009a845ec107b9561fa172",
+      "fewshot/examples_raw/ex80.sv": "6776a7b513eb9d996f70ad5fac0f504f82cf0982eef327c3e9654005efc70752",
+      "fewshot/examples_raw/frequencyDivider.sv": "b4dfc7405540e1810c819d88f877ef822d56feda0d255f9a0e6d74ede71083e8",
+      "fewshot/examples_raw/gulwani_cegar1.sv": "9fab70b17d2ec340f3bc5f02d4fd9f905b31986271be9875459d3ff1415ef1f2",
+      "fewshot/examples_raw/gulwani_cegar2_1.sv": "466408c647b64fd71a5c4dbc825a679bea8c6efe3729f34a5f03cd30fed1523d",
+      "fewshot/examples_raw/gulwani_fig1a.sv": "62f3e445cd02e635411de943f541f1008f4c27c3a0074b93720eeb5f3659965e"
+    },
+    "example_response_hashes": {
+      "fewshot/examples_full/FIR.txt": "f7b5d70b19e5f8be83d8e9c151d488e44ed03126b58652abbb8ed36099cbf460",
+      "fewshot/examples_full/ar.txt": "5ea19be27d705611c02b8c9ed4535c0238cb945c2ad9c0c48303c167bce74b44",
+      "fewshot/examples_full/arbiter.txt": "d50206674389ebde3417d1e671403265e7d910d26af234ab282ef35c647610c5",
+      "fewshot/examples_full/bidirectional_counter.txt": "5daae139e0db7f5ad49d9d915e7f13366205a25e3f45bbee9953ec0da25b82c5",
+      "fewshot/examples_full/brs1_1_3.txt": "6681a9944c6ffcb9d99b93e27dc20c67704f15053ef96158895a556ebd89629a",
+      "fewshot/examples_full/brs1_2_2.txt": "56e39d31df9ff0f713313971df9954329a29f32e78deca6d066dea6114e00028",
+      "fewshot/examples_full/ex1.txt": "10d750dcf9b926a506d4bafdfae83807d881b4172c086c9bb6c64d186d9c24f9",
+      "fewshot/examples_full/ex100.txt": "804bf9daea53fd7a3050f83f59ce4d6c790f91b018ca85358b931cbdd47236c8",
+      "fewshot/examples_full/ex15.txt": "540e512989b14032c220b7d58197d9e0c3e460aa43d0c6a06d28da8485d153cf",
+      "fewshot/examples_full/ex2.txt": "83f407a8f435d4e38b04bf6541a376c0695fbed6292110c66d3ebc9c60b6b335",
+      "fewshot/examples_full/ex3.txt": "415f5589949f82d98a7072247ca90b874f0dfb8495f49edaeaf52694eb66aad1",
+      "fewshot/examples_full/ex34.txt": "975b57c03f85ec0d6005327e40da5d52e91ea09d3180b9b93c5fcf4be0647e24",
+      "fewshot/examples_full/ex4.txt": "f5569c04c66efb55b97a230e4364ce13d935ff9edc71e74dd0a4702b24c3083c",
+      "fewshot/examples_full/ex5.txt": "4e9cd6a1b6b417738ee79038ec59f6d89765b3ef6d54017ee44df57f2e77ce14",
+      "fewshot/examples_full/ex51_a.txt": "de85098e8099fcac40218f749512e4aa2da3d36be8eed7d7b42c3108f3fb63b9",
+      "fewshot/examples_full/ex6.txt": "341dfc6ae86d800fa1b921743950b6d4eceb317fe0c879cd34cdd2998a964e0d",
+      "fewshot/examples_full/ex80.txt": "8ca86a30d464de8ab9240fc4f37c96745f36d3721d95bbd5f6018c6b5b05a9d9",
+      "fewshot/examples_full/frequencyDivider.txt": "073079bac6d5a95346bafb371aa202425600ecfb6df3239c4d600910ac703f30",
+      "fewshot/examples_full/gr2006.txt": "e54e861168227cb45d259c0d5e9cdb84e1de3cd9e7071fe9fabda03dd8bb3e3c",
+      "fewshot/examples_full/gulwani_cegar1.txt": "ca33a220fca202bd4712e0a58e33de40604f16c80a0bf69c1c62f87127066ddf",
+      "fewshot/examples_full/gulwani_cegar2_1.txt": "81e31c2bc36b8e9ced96ca9e2e65ea7d908130eba9623bed76386dbce349f1bb",
+      "fewshot/examples_full/gulwani_fig1a.txt": "c60de8e64a4e0ade735287f42dc21e1d5d5f3f9b3117a2cc62c1ebf3473e1794"
+    },
+    "max_k": 5,
+    "sentence_transformers_version": "5.1.0"
+  },
+  "modules": {
+    "benchmarks/hard/buffer_128_ebmc.sv": {
+      "input_sha256": "507d460614dd9e71834adb16228c3b07e40bb5a9109d0710367cb225fbbb7fe8",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6474210023880005
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.6377522945404053
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6303009986877441
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.611816942691803
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.569731593132019
+        }
+      ]
+    },
+    "benchmarks/hard/buffer_32_ebmc.sv": {
+      "input_sha256": "a43d46dc874a7a0d765835531a95d3e138dbebcdcd0f2750bca64c2b5633e89e",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6498658657073975
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.6398262977600098
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6315549612045288
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.612934947013855
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5723704099655151
+        }
+      ]
+    },
+    "benchmarks/hard/buffer_64_ebmc.sv": {
+      "input_sha256": "36abdbaadd9ed83ea182151867124c22bda8b50b6790b694baf45dffc4978590",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6499884128570557
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.639776349067688
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6326819658279419
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.6117639541625977
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5711226463317871
+        }
+      ]
+    },
+    "benchmarks/hard/counter_66_ebmc.sv": {
+      "input_sha256": "77b1bb425d8863aa27c798c65edde548f2baba1ec565ea7dd3bf2fac269f9b92",
+      "nearest": [
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.8771877288818359
+        },
+        {
+          "filename": "ar.sv",
+          "similarity": 0.8363808989524841
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.7840573191642761
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.7643901109695435
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.7552366256713867
+        }
+      ]
+    },
+    "benchmarks/hard/dp_ebmc.sv": {
+      "input_sha256": "de758a43c6125b8e048c31151ba91077864156ec85bd7b9394b4d95bb2a97b3e",
+      "nearest": [
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.6209790706634521
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6191456317901611
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.6069768071174622
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5678834319114685
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.5638394355773926
+        }
+      ]
+    },
+    "benchmarks/hard/ex15_ebmc.sv": {
+      "input_sha256": "7f532d57743b94ae2c254bd2fdb4b20abc1839e0d8ff9d6861af4f403be6bd42",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 1.0
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.9247719049453735
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.852507472038269
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8385018110275269
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7721245288848877
+        }
+      ]
+    },
+    "benchmarks/hard/ex3_ebmc.sv": {
+      "input_sha256": "7bb7290a87a6293af540bdae14e8dc690fa1a107de36e0fb8c7f250c4c1c9fca",
+      "nearest": [
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.9853403568267822
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.8334484696388245
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8311589360237122
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.8220143914222717
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.8066837787628174
+        }
+      ]
+    },
+    "benchmarks/hard/ex4_ebmc.sv": {
+      "input_sha256": "418a6eb634a0908188fc6672b2ed68e2c19bd65bf28206f143016a3397778aad",
+      "nearest": [
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.9758328199386597
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8006397485733032
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.7758044004440308
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7688256502151489
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.7685533761978149
+        }
+      ]
+    },
+    "benchmarks/hard/ex51_57_1_ebmc.sv": {
+      "input_sha256": "dcf65359847ae479d63e286c6d789b729e1d54cead69636f1e8a77546e62ff34",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.9957981109619141
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.923582911491394
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8700339198112488
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8518901467323303
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7746568918228149
+        }
+      ]
+    },
+    "benchmarks/hard/ex51_ebmc.sv": {
+      "input_sha256": "7e8fc21b75e94261f053ee774b2c685640d143eba073550f829073a7cd6feaf8",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.9621627330780029
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.9079301953315735
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8405462503433228
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8197931051254272
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7512295246124268
+        }
+      ]
+    },
+    "benchmarks/hard/ex80_ebmc.sv": {
+      "input_sha256": "015167af781dc767c76403b9f275363b2260b76a60387c24d35659ae6456463d",
+      "nearest": [
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.9999999403953552
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.906756579875946
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.8757914304733276
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8687968850135803
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8445779085159302
+        }
+      ]
+    },
+    "benchmarks/hard/fifo_ref_16_ebmc.sv": {
+      "input_sha256": "312eaeb277f14a7f1b287cd04ae555125e3b839a61600495d99490dfbd10de1c",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6279090046882629
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5976135730743408
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.5680796504020691
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5671818852424622
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5659216046333313
+        }
+      ]
+    },
+    "benchmarks/hard/fifo_ref_64_ebmc.sv": {
+      "input_sha256": "2d0d2e706b441a87c47c7e5b4f30ee87a1ae7b4303ed1965b79020330bdca55d",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6279090046882629
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5976135730743408
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.5680796504020691
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5671818852424622
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5659216046333313
+        }
+      ]
+    },
+    "benchmarks/hard/fifo_vis.sv": {
+      "input_sha256": "4a94e6b07fb63a1efaeb9fc2ff307c565ea92febcd330638751d3ad6bde742ca",
+      "nearest": [
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.5295135974884033
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5086705684661865
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.47690731287002563
+        },
+        {
+          "filename": "ex100.sv",
+          "similarity": 0.47651422023773193
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.46745532751083374
+        }
+      ]
+    },
+    "benchmarks/hard/gr2006_ebmc.sv": {
+      "input_sha256": "c9d6e2f6dcd0a0816902b532066b3db0f05a610172ecb24340de2b1de6251cd9",
+      "nearest": [
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.700832724571228
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6911529302597046
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6618316173553467
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.6611536741256714
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6610870957374573
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_cegar2_1_ebmc.sv": {
+      "input_sha256": "cc1429a3f536a80318eeee733815eb1c7bf976cb629de5bf4f1dbf60f78b8cb3",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.9991327524185181
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8439481258392334
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8258813619613647
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8256112337112427
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.7961382865905762
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_cegar2_2_ebmc.sv": {
+      "input_sha256": "ecf9151691dac05e502f6814b05416bb5a5275b3c9731e9d9449e6c232ce10ae",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.9939594268798828
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8480013012886047
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8333711624145508
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8316805362701416
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.7835659980773926
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_cegar2_3_ebmc.sv": {
+      "input_sha256": "4b4e32147137cd62daff15f239405a6202dea16211176fafb83f1c6fa8fe2a48",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.9832655191421509
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8571593761444092
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8395090103149414
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8168994784355164
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.7820028066635132
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_cegar2_4_ebmc.sv": {
+      "input_sha256": "2246090ea4960c588107835423a5e416596ddb026d1293529cfbbd47b76cb0ac",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.9794777631759644
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8625802993774414
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8472680449485779
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8309258818626404
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.7892637252807617
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_cegar2_5_ebmc.sv": {
+      "input_sha256": "1116bbfd03ba2dbdede8ff4cde31fbc4440d5c4bf79d48cf9828d06565061b0a",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.9628138542175293
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8695855736732483
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8552678823471069
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8405787348747253
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.7976915836334229
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_cegar2_ebmc.sv": {
+      "input_sha256": "a1c71d4f9cb2cec97a285db18b23b485b6b0413f94ed65825312e8a85483bf6f",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.929324746131897
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8801475763320923
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8581698536872864
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8445851802825928
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.8199818730354309
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_fig1a_2_ebmc.sv": {
+      "input_sha256": "3bb60b34ab2a706ddb0c77e486eb685e8b6191c560acdcd70e381b04edd54238",
+      "nearest": [
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9906374216079712
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9284383058547974
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8397374153137207
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.837166428565979
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8182632327079773
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_fig1a_4_ebmc.sv": {
+      "input_sha256": "a0dfeffc594a415d3dbe5d692e9234b731a8df421030f74e558b16f474675624",
+      "nearest": [
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9915273189544678
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9293461441993713
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8386648893356323
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8322523832321167
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8114622831344604
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_fig1a_5_ebmc.sv": {
+      "input_sha256": "b84cdd2196b33b78439df7f53abd7a2a8314d3e03406e0e5563cfe1afb957760",
+      "nearest": [
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9939072132110596
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9318283796310425
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8354653120040894
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.834080696105957
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8112273216247559
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_fig1a_6_ebmc.sv": {
+      "input_sha256": "254fd3c080138073a37039dffc4e0cf805ab6b34c4005ea192a704020015dd25",
+      "nearest": [
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9899519681930542
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9240360856056213
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8418995141983032
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8369128108024597
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8191782236099243
+        }
+      ]
+    },
+    "benchmarks/hard/gulwani_fig1a_ebmc.sv": {
+      "input_sha256": "51391f6ebde0cb8a76c2f0b75938f236793d2276b8944c7527b746b4a0173506",
+      "nearest": [
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9973649978637695
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9347729682922363
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8401085138320923
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8353129625320435
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8176534175872803
+        }
+      ]
+    },
+    "benchmarks/hard/lrg_arb_lrg_16_ebmc.sv": {
+      "input_sha256": "ead38cc1046af1792f852f9777226abe9cd7641736daf9df37e7e1f2fd30212e",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6989084482192993
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6840670108795166
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.6594338417053223
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6327201724052429
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.6167632937431335
+        }
+      ]
+    },
+    "benchmarks/hard/lrg_arb_lrg_4_ebmc.sv": {
+      "input_sha256": "77c2c69a64c19c0172f4fbf0097c14fa8d997a0797361f54d19f43434e063661",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7012109756469727
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6778644919395447
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.6623034477233887
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6275961995124817
+        },
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.6204507350921631
+        }
+      ]
+    },
+    "benchmarks/hard/lrg_arb_lrg_8_ebmc.sv": {
+      "input_sha256": "f3eb32fced78661ea7489f9bec3422f6c047bded76fedefdfcb189a54fc10d70",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7003496885299683
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.683571457862854
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.6606069207191467
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6346369981765747
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.620315432548523
+        }
+      ]
+    },
+    "benchmarks/hard/simple_cam_16_ebmc.sv": {
+      "input_sha256": "464547d28d9e1e6e766aec32b86c3bcd6856c4d79966fdc7ea8d4c74cf300785",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5747449398040771
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5706619620323181
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5303638577461243
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.5198731422424316
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5031266212463379
+        }
+      ]
+    },
+    "benchmarks/hard/simple_cam_8_ebmc.sv": {
+      "input_sha256": "714388af750e15236ff4945f12f4f80dae8a98a1c16da313760e50cc8df18376",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5760492086410522
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5719345808029175
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5293178558349609
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.5201662182807922
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.504072368144989
+        }
+      ]
+    },
+    "benchmarks/main_experiment/Barrel.sv": {
+      "input_sha256": "17fbc55fe13d35d6c3f7ff53fec021097fc9713c9cd57623ea52097dc4112ebd",
+      "nearest": [
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.5332960486412048
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.5193162560462952
+        },
+        {
+          "filename": "ex100.sv",
+          "similarity": 0.49325668811798096
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.478524386882782
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.47055670619010925
+        }
+      ]
+    },
+    "benchmarks/main_experiment/Rrobin_p4.sv": {
+      "input_sha256": "5df3cddeed5c102488d6b9519c391378383918e253580b5e92022f9d413bf2e5",
+      "nearest": [
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.6587408781051636
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.47743532061576843
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4768914580345154
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.46748533844947815
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.4640394449234009
+        }
+      ]
+    },
+    "benchmarks/main_experiment/am2910_p1.sv": {
+      "input_sha256": "b1dcffca46f0c9a846cdb7bd87a412dc96896af61b041f90a0805833c5401efc",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6473587155342102
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6132818460464478
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.603657603263855
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6004030704498291
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.5571000576019287
+        }
+      ]
+    },
+    "benchmarks/main_experiment/am2910_p2.sv": {
+      "input_sha256": "975c9ce55fe0923527a95bc22ade56e7190d50f969d1830e11bda16cc4aa17ed",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6473587155342102
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6132818460464478
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.603657603263855
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6004030704498291
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.5571000576019287
+        }
+      ]
+    },
+    "benchmarks/main_experiment/am2910_p3.sv": {
+      "input_sha256": "5a3531766f341fac8e636cfb2ad6a2a15a4c4cd9d9f1c939d8ca5795ff3a6299",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6473587155342102
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6132818460464478
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.603657603263855
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6004030704498291
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.5571000576019287
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ar.sv": {
+      "input_sha256": "1867007465d79bb0433837905d1dd3ca579a0979f41ad246e5409f4676eb4fc0",
+      "nearest": [
+        {
+          "filename": "ar.sv",
+          "similarity": 1.0000001192092896
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.8684735894203186
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8012440204620361
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.7702005505561829
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.7658587694168091
+        }
+      ]
+    },
+    "benchmarks/main_experiment/b01.sv": {
+      "input_sha256": "bad5dfae33be04ee0eca594b4832303d5e79d6f6f601b3783ba9430b33027262",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6442849636077881
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.634584903717041
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6282004117965698
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.61700838804245
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.5953303575515747
+        }
+      ]
+    },
+    "benchmarks/main_experiment/b02_p1.sv": {
+      "input_sha256": "1ccfc95fc14b1fea46afc2bd8be4694c50f58bb205efdf461b528524dcf10d0d",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6645760536193848
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6538844108581543
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6422444581985474
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6216140389442444
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.6026695966720581
+        }
+      ]
+    },
+    "benchmarks/main_experiment/b02_p2.sv": {
+      "input_sha256": "445569967e910ebf5e60728e29604df55da5e8a653fa5858a24fb25726f590a6",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6656520366668701
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6564866304397583
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6413674354553223
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.622492790222168
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.6050881147384644
+        }
+      ]
+    },
+    "benchmarks/main_experiment/b03.sv": {
+      "input_sha256": "30449105568dd781eba88335eda4cbd393448cb348b49ccdc45c24900d25e72d",
+      "nearest": [
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.6315754055976868
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6104310154914856
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5973615646362305
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5787004828453064
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.5708296895027161
+        }
+      ]
+    },
+    "benchmarks/main_experiment/bit-vector.sv": {
+      "input_sha256": "a41e07ee5d7a7ecae498d8fef66ae8ee4ed171fe6c7a63f6e1d1bfd6ae38d368",
+      "nearest": [
+        {
+          "filename": "ar.sv",
+          "similarity": 0.7043658494949341
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.6350436210632324
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6130574941635132
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.61219722032547
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.6081507205963135
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_1_1.sv": {
+      "input_sha256": "cc081d0ec2c1c1b61643178a1a2e3571e7eabf8740ea57d2490b6373b4277941",
+      "nearest": [
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9815844297409058
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.964592695236206
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7769687175750732
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7750089168548584
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.7717053890228271
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_1_2.sv": {
+      "input_sha256": "f78a957f194023e6b5d7b4ad275b2658c4aa44acd86d2fb1bf0fe3ed62d786f7",
+      "nearest": [
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9545648097991943
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9460289478302002
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.7836610078811646
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7828248143196106
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.779329240322113
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_1_3.sv": {
+      "input_sha256": "5a047816ad7cdd9f259f84f5001901129c7e8a2f55b4fac120253da4c62283df",
+      "nearest": [
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 1.0
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9475667476654053
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8006424903869629
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7994399070739746
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7955797910690308
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_1_4.sv": {
+      "input_sha256": "390d54d6a0a6566677a9bba5054344d8c756fbe1788d15a0ab62d1622156a4ee",
+      "nearest": [
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9617812633514404
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9424837231636047
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.7999749183654785
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.7941761016845703
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7822229862213135
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_1_5.sv": {
+      "input_sha256": "90c3e78c045d959aa24e3953578a5eca1aadb164b248f62ac23a59c1f8fbad4a",
+      "nearest": [
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9747293591499329
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9486464262008667
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8140575885772705
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8118836879730225
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8110740184783936
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_2_1.sv": {
+      "input_sha256": "57b6dfd8491f8bf45f8a2aebe40c85c5a9b4b3c3f8702e1a5b493c50a3ff7ccd",
+      "nearest": [
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9899511933326721
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9454115629196167
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7795604467391968
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.7745356559753418
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7640955448150635
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_2_2.sv": {
+      "input_sha256": "844dad385f42302b2f2ed6bbade4a5d07f0482347e919f2867dd6ae0bee1a9ed",
+      "nearest": [
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 1.0
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9475667476654053
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7700631022453308
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.7615330219268799
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7585155963897705
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_2_3.sv": {
+      "input_sha256": "20e32e58ed3919f87e459a2a15c16627ee8538bb64d4692f2434aa4e82b197bb",
+      "nearest": [
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.976703405380249
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9439134001731873
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7838630080223083
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7743813991546631
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.7660225629806519
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_2_4.sv": {
+      "input_sha256": "2e382fabb75b0a7630189b5139e025439017bf126d2ed0723647a04f13d88f91",
+      "nearest": [
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9858628511428833
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9550625085830688
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7779883742332458
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7707256078720093
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.768937349319458
+        }
+      ]
+    },
+    "benchmarks/main_experiment/brs1_2_5.sv": {
+      "input_sha256": "aaf311e62616b59dbeed58a89b00bf04b9c9ef3b25132fa7e9a9859705da810f",
+      "nearest": [
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.9844402074813843
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.9586775302886963
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7800626754760742
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7776864171028137
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.7774031758308411
+        }
+      ]
+    },
+    "benchmarks/main_experiment/bufferAlloc.sv": {
+      "input_sha256": "9dbbf4af9c33c5014840d5b83c93f309e93680ff3e17db2671b015212cd221e2",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5372534990310669
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.5186249613761902
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.5005448460578918
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.4757237136363983
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.4745471775531769
+        }
+      ]
+    },
+    "benchmarks/main_experiment/edgeDetectors.sv": {
+      "input_sha256": "2c67ee5dd02655906a90bbdea6cbedc74050ddc921c08a864c89228efd33f4f8",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5214136838912964
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5006022453308105
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.4908665418624878
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.45951494574546814
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.4532076418399811
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ethernet.define.112_vcegar_p5.sv": {
+      "input_sha256": "d7c7b6cddcdc21c6670865906ca6b8c7249cf63fc362eb314c2fb7784527e483",
+      "nearest": [
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.544061005115509
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5104727149009705
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.48701798915863037
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.47640591859817505
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.4707687497138977
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex1.sv": {
+      "input_sha256": "7fe77bb0800c3525f0a8cbf52cc0391267c645febf115499a0282aea37782032",
+      "nearest": [
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.9999998807907104
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.8512001037597656
+        },
+        {
+          "filename": "ex2.sv",
+          "similarity": 0.7872276306152344
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.7853582501411438
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.7788358926773071
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex100.sv": {
+      "input_sha256": "c38bdf3f25b354dde4794d9cf9229a638ed82ac2f6683e46a902255a8b615908",
+      "nearest": [
+        {
+          "filename": "ex100.sv",
+          "similarity": 1.0000001192092896
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7363415956497192
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.7091834545135498
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6891063451766968
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.6811923980712891
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex2.sv": {
+      "input_sha256": "99ff60dfc4c2107cb9c059bbbc8909f742b95e6d8586a20e0d009a9b5bef5865",
+      "nearest": [
+        {
+          "filename": "ex2.sv",
+          "similarity": 0.9999998211860657
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.9038751125335693
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.7978304028511047
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.7872276306152344
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7596709728240967
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex34.sv": {
+      "input_sha256": "0f236fb74692a3ab45395a658751491e81dce1b7b816ca2b7fc63bdf8a1a721d",
+      "nearest": [
+        {
+          "filename": "ex34.sv",
+          "similarity": 1.0000001192092896
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.906756579875946
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.8601092100143433
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.852507472038269
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8278462290763855
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex34_30.sv": {
+      "input_sha256": "c79e9e4c98f2cd320da51f4b9ac6f75da4808c0fa41d05dcbe1e7c761dad4203",
+      "nearest": [
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.9326232075691223
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8611762523651123
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8381202220916748
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.8359031677246094
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8273337483406067
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex5.sv": {
+      "input_sha256": "6584679d6a2c1940558c062b88badc9d7218285aef838c6b2152f47be8ad2d27",
+      "nearest": [
+        {
+          "filename": "ex5.sv",
+          "similarity": 1.0
+        },
+        {
+          "filename": "ar.sv",
+          "similarity": 0.8684735894203186
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8406571745872498
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.809931755065918
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.7982396483421326
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex51_a.sv": {
+      "input_sha256": "62c30d40da79d699845fd36831bf76d12631eceb82b30f2d481393116ebe7413",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 1.0000001192092896
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.9247719049453735
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8757914304733276
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8601092100143433
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.774569571018219
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex6.sv": {
+      "input_sha256": "ba77a2faa5061e2c7138a70e57e30a43703b77c093c8f30ba7b7fd95d9ed6dd1",
+      "nearest": [
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.9743120670318604
+        },
+        {
+          "filename": "ex2.sv",
+          "similarity": 0.915096640586853
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.8252828121185303
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8213043808937073
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.7771240472793579
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex65.sv": {
+      "input_sha256": "53c1d979ccdc6dcb73d20480d255ce4f4f42022ddae54243ff53249611937c8a",
+      "nearest": [
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8846322298049927
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8779947757720947
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8728859424591064
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8591939210891724
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8388140797615051
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex7.sv": {
+      "input_sha256": "c0e726dd17bb1cbecede0e132fd12a94f5fdb31d2bfcb94bb78f354076a7144b",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.8362734317779541
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.7942904233932495
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.7654014825820923
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.762730598449707
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.740820050239563
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex8.sv": {
+      "input_sha256": "91726d186c56abec014afe14ad1316440eaea74e03d7f9abe4401cd553ad4435",
+      "nearest": [
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8614133596420288
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8190027475357056
+        },
+        {
+          "filename": "ex4.sv",
+          "similarity": 0.8152217864990234
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.8132292032241821
+        },
+        {
+          "filename": "ex2.sv",
+          "similarity": 0.8072223663330078
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex9.sv": {
+      "input_sha256": "046234bd17377ff9e5778d0578cec4db2513d6eed3fd991e6131a9329374d9a9",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.8200768828392029
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.7661255598068237
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.7589622139930725
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.7394195795059204
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.7289092540740967
+        }
+      ]
+    },
+    "benchmarks/main_experiment/ex90.sv": {
+      "input_sha256": "fc5f4f860fca930195c97a851ddb068021a3653a5a466c64ccd43e6dcecf847c",
+      "nearest": [
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8566325902938843
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8517739176750183
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.8321957588195801
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8159441947937012
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.8021632432937622
+        }
+      ]
+    },
+    "benchmarks/main_experiment/gulwani_cegar1.sv": {
+      "input_sha256": "99c5e1ff2e0d985cf2f155594c4d3e6fe71ff044d68284f63adf52cb561c6703",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 1.0
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9346193671226501
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8687968850135803
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.844069242477417
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8130338191986084
+        }
+      ]
+    },
+    "benchmarks/main_experiment/gulwani_cegar1_2.sv": {
+      "input_sha256": "7dd4f546ed2b2d80c0ee714601d9becb9929a78fd340ac12071db94519821821",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.968238115310669
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9202979803085327
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8836528062820435
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8435519337654114
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.7951921224594116
+        }
+      ]
+    },
+    "benchmarks/main_experiment/gulwani_cegar1_3.sv": {
+      "input_sha256": "ec96be4445b41b035b3b982fbceb1631ff9c44ee9d531779f3e2566ecd858576",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9736559391021729
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9296517372131348
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8648242950439453
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8405572175979614
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.8043678998947144
+        }
+      ]
+    },
+    "benchmarks/main_experiment/gulwani_cegar1_4.sv": {
+      "input_sha256": "e6f5295202d75d4804ac8fc747cae5949a7ed8ff9cf0cec37ab1580c06dcfe8d",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9775826334953308
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9299098253250122
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8581358194351196
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8492293357849121
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.8172875642776489
+        }
+      ]
+    },
+    "benchmarks/main_experiment/gulwani_cegar1_5.sv": {
+      "input_sha256": "fa2f4d99f1741db0bad15bcacd70444a330c52da2d4ad545b638e0ee8f9561e2",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.9776144623756409
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9322220683097839
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8571366667747498
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8475452661514282
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.8221340179443359
+        }
+      ]
+    },
+    "benchmarks/main_experiment/gulwani_fig1a_3.sv": {
+      "input_sha256": "61f8f67967c69db2da2b7c88ddbd1d6c3a39a972183e685ed1f244e0b0799fc2",
+      "nearest": [
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.9942206740379333
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.927260160446167
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.8366605639457703
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.8285367488861084
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.8206628561019897
+        }
+      ]
+    },
+    "benchmarks/main_experiment/h_Arbiter.sv": {
+      "input_sha256": "b953df98de80d3107c05bd2de78e7fe9d81df7b0c797528070216b7aaa63c53e",
+      "nearest": [
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.6549623012542725
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6241347789764404
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.5893058776855469
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5720387697219849
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.5544449090957642
+        }
+      ]
+    },
+    "benchmarks/main_experiment/h_Dekker.sv": {
+      "input_sha256": "f1f537d5dab1ef3e84ebb08c04a8af4c029a58ede81af047dc1aa0c0da0b061f",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6543388366699219
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6233682036399841
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5915749669075012
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.5849947929382324
+        },
+        {
+          "filename": "FIR.sv",
+          "similarity": 0.5842440724372864
+        }
+      ]
+    },
+    "benchmarks/main_experiment/h_TreeArb.sv": {
+      "input_sha256": "618c700df772297ee88b1edfd5fdcc0af00ed015415d8db8ecb53d9caaec59eb",
+      "nearest": [
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.48021331429481506
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.36765074729919434
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.36425572633743286
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.3473013937473297
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.3415379524230957
+        }
+      ]
+    },
+    "benchmarks/main_experiment/h_Vending.sv": {
+      "input_sha256": "7bcccae8c12885f071ec93ff729fe6e12202c1d55be8d39dbbe4ec7cb3f42f9f",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6154837608337402
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.5740936994552612
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.5715551376342773
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5654737949371338
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5556381940841675
+        }
+      ]
+    },
+    "benchmarks/main_experiment/h_Vsa16_p1.sv": {
+      "input_sha256": "4803fa4b7ae1b4cb7f99ca275c0d0bd3bb7f63beb0105061908e702b04813a05",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5347321033477783
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.5228061079978943
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5106803178787231
+        },
+        {
+          "filename": "brs1_1_3.sv",
+          "similarity": 0.5082309246063232
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.5080971717834473
+        }
+      ]
+    },
+    "benchmarks/main_experiment/h_Vsa16a_p5.sv": {
+      "input_sha256": "a3ea3424d1596c671239a7dfd520b96bb925a5f0cbce00a15674b2d28a280279",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.49342992901802063
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.48273590207099915
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.4398488402366638
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.4287680685520172
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4200720489025116
+        }
+      ]
+    },
+    "benchmarks/main_experiment/icctl1_p2.sv": {
+      "input_sha256": "07bdc8f4c81bbc692675e2457032ca4e8e318a1ce7460f4199005b2c3a9df156",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.34781843423843384
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.34525972604751587
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.33080872893333435
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.32364124059677124
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.3173583745956421
+        }
+      ]
+    },
+    "benchmarks/main_experiment/icctl1_p3.sv": {
+      "input_sha256": "72d7510beec66974852d021dbdacd28461b12497859218533cd6f538cb7da020",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.34781843423843384
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.34525972604751587
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.33080872893333435
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.32364124059677124
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.3173583745956421
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_1.sv": {
+      "input_sha256": "b66b5b23870d7d4ccc03ce27a33732d94a3c9f45cda6617c4645c4ac79e5fa85",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_10.sv": {
+      "input_sha256": "35c42c31a5b3b45bd422894796e06995a8bc196989374cddc1cb0781eb56d8b1",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_11.sv": {
+      "input_sha256": "5a845d3ad4e095df326168e734c311ac64db13d436fd4b255011e73f8d2ba142",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_13.sv": {
+      "input_sha256": "73a8298ebe213578055a70c795280dae9ba96b6d45686e592ab95567b6023d67",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_20.sv": {
+      "input_sha256": "40e214a05ca06db6d3339e731d9e9f4685e1422544236a05c7c011d2e480836b",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_21.sv": {
+      "input_sha256": "52e8124802ff44ad2dd808203f09b4f65108c2b5307a6d4559520fc522925f62",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_6.sv": {
+      "input_sha256": "3ab105164002af20bac4365ed9c6cff2fc952e8eedfa459ad379f8a51b536cc1",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_7.sv": {
+      "input_sha256": "b9be713275435618751897421657d8d67b52dae9b841b11710c0caf226c30d5a",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/itc99_b13_9.sv": {
+      "input_sha256": "9b55f9749a767e721e78bce183865be565005e6709395b947156577895a37087",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.6186271905899048
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6035120487213135
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.557842493057251
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5410805940628052
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5396943092346191
+        }
+      ]
+    },
+    "benchmarks/main_experiment/lcd_5-s2.sv": {
+      "input_sha256": "7d1484acafb9e05fee1b33819608f25dcbd2eac5710fbdfa9855c4f3a945e9dd",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5742654204368591
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5688496828079224
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5516168475151062
+        },
+        {
+          "filename": "ex34.sv",
+          "similarity": 0.4974273443222046
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.4921417534351349
+        }
+      ]
+    },
+    "benchmarks/main_experiment/load_store_1-s1.sv": {
+      "input_sha256": "c163055aa890bb34314f4d6bdafbdd99f0e93d31d549ccf6b66d47d73f6dc79d",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6920809745788574
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6762497425079346
+        },
+        {
+          "filename": "ar.sv",
+          "similarity": 0.6700872778892517
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.6320748925209045
+        },
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.628602147102356
+        }
+      ]
+    },
+    "benchmarks/main_experiment/mpeg_1.sv": {
+      "input_sha256": "a340b81836e4b5a612804c17afaa6b29aa06ea4d1a75fd7ac1ba7d426e9d5a65",
+      "nearest": [
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.6158006191253662
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.6123814582824707
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.578286349773407
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.5389655828475952
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.529061496257782
+        }
+      ]
+    },
+    "benchmarks/main_experiment/s1269b_p5.sv": {
+      "input_sha256": "b9b09d66e49c222543bde69128e4f04ebbe18243a94ff58d3ce57a0f68a9d875",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.6158931851387024
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.5897109508514404
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.5885664224624634
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5675504207611084
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.552361249923706
+        }
+      ]
+    },
+    "benchmarks/main_experiment/sdlx_control.sv": {
+      "input_sha256": "db302f00e2e2b7d9b36006c4d68d6b658293c39264c783c6301f0f254b744d43",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.49781709909439087
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.484818696975708
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.4295770525932312
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.40249526500701904
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.39006540179252625
+        }
+      ]
+    },
+    "benchmarks/main_experiment/swap2.sv": {
+      "input_sha256": "881d31c084e6f7ec11b7236fa89f9b38958ddd6f6a9d61b316080b825addc9b7",
+      "nearest": [
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.7117512226104736
+        },
+        {
+          "filename": "ar.sv",
+          "similarity": 0.7106066942214966
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.7095115184783936
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6675440073013306
+        },
+        {
+          "filename": "ex3.sv",
+          "similarity": 0.6498093605041504
+        }
+      ]
+    },
+    "benchmarks/main_experiment/synabs.sv": {
+      "input_sha256": "d05ac3c96dcf92e539f4ee2a86ec69370311656539d2f40fa2ffeebaf7eb2da1",
+      "nearest": [
+        {
+          "filename": "ex6.sv",
+          "similarity": 0.7437703609466553
+        },
+        {
+          "filename": "ar.sv",
+          "similarity": 0.7024189233779907
+        },
+        {
+          "filename": "ex2.sv",
+          "similarity": 0.6985421776771545
+        },
+        {
+          "filename": "ex1.sv",
+          "similarity": 0.6979198455810547
+        },
+        {
+          "filename": "ex5.sv",
+          "similarity": 0.6899533867835999
+        }
+      ]
+    },
+    "benchmarks/main_experiment/three_processor_bin_2.sv": {
+      "input_sha256": "ca057a2e944527f86b38fb9f12ffc6d8d97b067ba6da4a82471869e4043fa7f5",
+      "nearest": [
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.4468674957752228
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.441653847694397
+        },
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.43550801277160645
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.4098910093307495
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.3984016180038452
+        }
+      ]
+    },
+    "benchmarks/main_experiment/two_processor_bin_2.sv": {
+      "input_sha256": "ab3cd062910e82c6df0b2e1d7922f3cc64a118dff6cb2ef692c95cd00abb7029",
+      "nearest": [
+        {
+          "filename": "arbiter.sv",
+          "similarity": 0.4420009255409241
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.43897318840026855
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.4382549822330475
+        },
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.4008408188819885
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.38955897092819214
+        }
+      ]
+    },
+    "benchmarks/main_experiment/usb_phy_1.sv": {
+      "input_sha256": "700d1ee774f53c136e038e19b43e5955ca91a0975bd24d16afb700883cd52a55",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.4151485562324524
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.39615535736083984
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.3822189271450043
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.35572659969329834
+        },
+        {
+          "filename": "FIR.sv",
+          "similarity": 0.3503068685531616
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vMiim.sv": {
+      "input_sha256": "1a896b75f35ebc37eed9edfb5baa950354989252df0b56426a159f7783a19586",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.4868631362915039
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.46722444891929626
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.45407456159591675
+        },
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.4279510974884033
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.42434751987457275
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vga_4-s1.sv": {
+      "input_sha256": "2ae02c2592be272aca53e2303f9e7427141c358bdc2269e1843e5fb8c88e0bf0",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.57152259349823
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5593888759613037
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5379531383514404
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.508868396282196
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4944866895675659
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vga_4-s2.sv": {
+      "input_sha256": "1627997398125ab8b50bf71fd393c494b56a64bd2f0c206bce53e34013d59798",
+      "nearest": [
+        {
+          "filename": "gulwani_cegar1.sv",
+          "similarity": 0.57152259349823
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.5593888759613037
+        },
+        {
+          "filename": "gulwani_fig1a.sv",
+          "similarity": 0.5379531383514404
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.508868396282196
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4944866895675659
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vsaR_p02.sv": {
+      "input_sha256": "8b567cc3691ae9f2404373e535f9ad8538ba4b3722f79a3e825283a48f0694ea",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.49754559993743896
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.48945996165275574
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.43718838691711426
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4213004410266876
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.41641712188720703
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vsaR_p06.sv": {
+      "input_sha256": "f249da1b69ad61a65bdf805f8b1e8d8593776b540c63bc624b0fcaf7bfeffd44",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.49754559993743896
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.48945996165275574
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.43718838691711426
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4213004410266876
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.41641712188720703
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vsaR_p07.sv": {
+      "input_sha256": "0bbcf275742f45cc47f3b95c841db9f1668b3c8ed35014d3dcea2b5c7d173b85",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.49754559993743896
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.48945996165275574
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.43718838691711426
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4213004410266876
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.41641712188720703
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vsaR_p11.sv": {
+      "input_sha256": "ca02824510e3187d0598593b63224f3991b1323c4180e13833dabae76864f9e6",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.49754559993743896
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.48945996165275574
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.43718838691711426
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4213004410266876
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.41641712188720703
+        }
+      ]
+    },
+    "benchmarks/main_experiment/vsaR_p16.sv": {
+      "input_sha256": "a6cd3a37ba184c3b156c04e3a7b60003fb91fdf5566139d4c079eb038233040d",
+      "nearest": [
+        {
+          "filename": "ex15.sv",
+          "similarity": 0.49754559993743896
+        },
+        {
+          "filename": "ex51_a.sv",
+          "similarity": 0.48945996165275574
+        },
+        {
+          "filename": "gulwani_cegar2_1.sv",
+          "similarity": 0.43718838691711426
+        },
+        {
+          "filename": "ex80.sv",
+          "similarity": 0.4213004410266876
+        },
+        {
+          "filename": "brs1_2_2.sv",
+          "similarity": 0.41641712188720703
+        }
+      ]
+    }
+  },
+  "schema_version": 1
+}

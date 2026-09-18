@@ -31,6 +31,10 @@ def evaluate_non_agentic(
     exp_name=None,
     skip_prompts_creation=False,
     ebmc_timeout=120,
+    work_dir=None,
+    fewshot_selection="live",
+    cache_read_only=False,
+    strict_replay=False,
 ):
     assert os.path.isdir(modules_dir)
 
@@ -41,7 +45,11 @@ def evaluate_non_agentic(
         f"{modules_dir_basename}_fs{few_shot}_ns{num_samples}"
         f"_{model_names_string}_{os.path.basename(template_file)}"
     )
-    prompts_dir = os.path.join(ROOT_DIR, "scripts", "prompts", prompts_dir_suffix)
+    prompts_dir = (
+        os.path.join(work_dir, "prompts")
+        if work_dir
+        else os.path.join(ROOT_DIR, "scripts", "prompts", prompts_dir_suffix)
+    )
     aggregate = not separate
 
     # Reads (caches) come from `storage_dir`. Writes (results, summaries,
@@ -64,7 +72,9 @@ def evaluate_non_agentic(
     arguments_dict = {
         "input_json_path": output_json_lemmas,
         "output_json_path": output_json_eval,
-        "cache_result": True,
+        "cache_result": not (
+            cache_read_only or evaluation_cache_mode == CacheMode.FORCE_CACHED
+        ),
         "storage_dir": storage_dir,
         "modules_dir": modules_dir,
         "model": model,
@@ -80,6 +90,9 @@ def evaluate_non_agentic(
         "exp_name": exp_name,
         "skip_prompts_creation": skip_prompts_creation,
         "ebmc_timeout": ebmc_timeout,
+        "fewshot_selection": fewshot_selection,
+        "cache_read_only": cache_read_only,
+        "strict_replay": strict_replay,
     }
 
     if not skip_prompts_creation:
@@ -110,6 +123,8 @@ def evaluate_non_agentic(
         cache_more=cache_more,
         clear=clear,
         aggregate=aggregate,
+        cache_read_only=cache_read_only,
+        strict_cache=strict_replay,
     )
     evaluate_lemmas(**arguments_dict)
     df, results = get_summary_table(output_json_eval, output_dir=output_dir)

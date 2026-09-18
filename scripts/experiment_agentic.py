@@ -12,10 +12,11 @@ import argparse
 from tqdm import tqdm
 import logging
 import time
+from contextlib import nullcontext
 from utils import setup_logging
 from pathlib import Path
 from fewshot.few_shot import embedding_model_context
-from diskcache import Cache
+from cache_utils import open_cache
 
 
 def run_conversations_on_dir(
@@ -30,6 +31,10 @@ def run_conversations_on_dir(
     ebmc_timeout=120,
     cactus_cache_root=None,
     time_budget_s=None,
+    work_dir=None,
+    fewshot_selection="live",
+    cache_read_only=False,
+    strict_replay=False,
 ):
     """
     Run agentic conversations on every .sv module in `input_dir`.
@@ -46,10 +51,19 @@ def run_conversations_on_dir(
     shared_eval_cache = None
     shared_llm_cache = None
     if cactus_cache_root is None:
-        shared_eval_cache = Cache(os.path.join(storage_dir, "eval_cache"))
-        shared_llm_cache = Cache(os.path.join(storage_dir, "llm_cache"))
-    with embedding_model_context() as embedding_model:
-        for filename in tqdm(os.listdir(input_dir), desc="Processing files"):
+        shared_eval_cache = open_cache(
+            os.path.join(storage_dir, "eval_cache"), read_only=cache_read_only
+        )
+        shared_llm_cache = open_cache(
+            os.path.join(storage_dir, "llm_cache"), read_only=cache_read_only
+        )
+    model_context = (
+        embedding_model_context()
+        if few_shot and fewshot_selection == "live"
+        else nullcontext(None)
+    )
+    with model_context as embedding_model:
+        for filename in tqdm(sorted(os.listdir(input_dir)), desc="Processing files"):
             file_path = os.path.join(input_dir, filename)
             if not os.path.isfile(file_path) or not filename.endswith(".sv"):
                 continue
@@ -72,8 +86,12 @@ def run_conversations_on_dir(
                         f"No cactus eval_cache for {module_base} at {per_module_eval_dir}; "
                         f"opening empty cache (will re-run EBMC for any missing entries)."
                     )
-                llm_cache = Cache(per_module_llm_dir)
-                eval_cache = Cache(per_module_eval_dir)
+                llm_cache = open_cache(
+                    per_module_llm_dir, read_only=cache_read_only
+                )
+                eval_cache = open_cache(
+                    per_module_eval_dir, read_only=cache_read_only
+                )
             else:
                 llm_cache = shared_llm_cache
                 eval_cache = shared_eval_cache
@@ -93,6 +111,10 @@ def run_conversations_on_dir(
                     num_iterations=num_iterations,
                     ebmc_timeout=ebmc_timeout,
                     time_budget_s=time_budget_s,
+                    work_dir=os.path.join(work_dir, module_base) if work_dir else None,
+                    fewshot_selection=fewshot_selection,
+                    cache_read_only=cache_read_only,
+                    fail_on_cache_miss=strict_replay,
                 )
                 result = agent.converse()
                 results[filename] = result
@@ -189,6 +211,10 @@ def experiment_agentic(
     ebmc_timeout=120,
     cactus_cache_root=None,
     time_budget_s=None,
+    work_dir=None,
+    fewshot_selection="live",
+    cache_read_only=False,
+    strict_replay=False,
 ):
 
     storage_dir = storage_dir if storage_dir else ROOT_DIR
@@ -220,7 +246,22 @@ def experiment_agentic(
         ebmc_timeout=ebmc_timeout,
         cactus_cache_root=cactus_cache_root,
         time_budget_s=time_budget_s,
+        work_dir=work_dir,
+        fewshot_selection=fewshot_selection,
+        cache_read_only=cache_read_only,
+        strict_replay=strict_replay,
     )
+
+    prompt_errors = sorted(
+        filename
+        for filename, result in results.items()
+        if result.get("stop_reason") == "prompt_error"
+    )
+    if strict_replay and prompt_errors:
+        raise RuntimeError(
+            "Forced-cache replay encountered LLM cache misses/errors for: "
+            + ", ".join(prompt_errors)
+        )
 
     with open(
         os.path.join(

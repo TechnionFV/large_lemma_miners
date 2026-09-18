@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "s
 from utils import extract_json_block, extract_lemmas, ROOT_DIR
 from prompt_llms import prompt_llms
 from tqdm import tqdm
-from diskcache import Cache
+from cache_utils import open_cache
 
 
 def add_lemmas(lemma_data, module_name, llm_model, lemmas, representation):
@@ -63,13 +63,17 @@ def process_prompts(
     cache_more=False,
     clear=False,
     aggregate=True,
+    cache_read_only=False,
+    strict_cache=False,
     **kwargs,
 ):
     """Iterates over all prompt files in the directory, prompts llms and outputs returned lemmas in a ."""
     lemma_data = {}
-    llm_cache = Cache(os.path.join(storage_dir, "llm_cache"))
+    llm_cache = open_cache(
+        os.path.join(storage_dir, "llm_cache"), read_only=cache_read_only
+    )
     for prompt_file in tqdm(
-        os.listdir(prompts_dir), desc="Running inference on prompt files"
+        sorted(os.listdir(prompts_dir)), desc="Running inference on prompt files"
     ):
         if not prompt_file.endswith(".json"):
             continue
@@ -90,10 +94,13 @@ def process_prompts(
                 num_responses_to_return=num_responses_to_return,
                 cache_more=cache_more,
                 clear=clear,
+                cache_read_only=cache_read_only,
                 **kwargs,
             )
 
         except Exception as e:
+            if strict_cache:
+                raise
             print(f"[ERROR]: {e}. Skipping.")
             continue
 
@@ -101,6 +108,10 @@ def process_prompts(
 
         if force_cached and not result["cache_hit"]:
             assert llm_responses == None
+            if strict_cache:
+                raise RuntimeError(
+                    f"LLM cache miss for prompt {prompt_file}"
+                )
             print(f"[FORCE CACHE] No cached response for {prompt_file}. Skipping.")
             continue
 

@@ -1,59 +1,44 @@
-"""Few-shot example selection.
-
-Public API:
-    embedding_model_context()
-        Context manager that lazily imports `sentence_transformers` and
-        yields a loaded model.
-    get_example_embeddings(model, dir)
-        Compute embeddings for every `.sv` file in `dir`.
-    get_k_nearest(model, filepath, examples, k=3)
-        Return the top-k nearest example files by cosine similarity.
-    load_fewshot_selection_cache(path)
-        Load the pre-computed `data/fewshot_selection.json` so that
-        `get_k_nearest` answers from cache without needing
-        `sentence_transformers`. See Design §16.
-    cache_miss_summary() / fewshot_selection_cache_loaded()
-        Introspection helpers for tests and the `--fewshot-selection`
-        CLI surface.
-
-When the cache is loaded and a module is found there, `get_k_nearest`
-never touches the embedding model argument — callers can pass `None`.
-This lets `entry_point.py --fewshot-selection cached` skip the model
-import entirely when the cache has every module (the paper case).
-"""
+"""Deterministic live and cached few-shot example selection."""
 
 from __future__ import annotations
 
-import atexit
+import hashlib
 import json
 import logging
-import os
 from contextlib import contextmanager
 from pathlib import Path
 
 import numpy as np
 
 
-
 logger = logging.getLogger(__name__)
 
+EMBEDDING_MODEL_ID = "sentence-transformers/all-mpnet-base-v2"
+EMBEDDING_MODEL_REVISION = "e8c3b32edf5434bc2275fc9bab85f82640a19130"
+SELECTION_CACHE_SCHEMA_VERSION = 1
 
-# --------------------------------------------------------------------
-# Embedding-model context (lazy sentence_transformers import)
-# --------------------------------------------------------------------
+
+class SelectionCacheError(RuntimeError):
+    """Raised when a cached few-shot selection cannot be used safely."""
 
 
 @contextmanager
-def embedding_model_context():
-    """Context manager for the embedding model.
+def embedding_model_context(
+    model_id: str = EMBEDDING_MODEL_ID,
+    revision: str = EMBEDDING_MODEL_REVISION,
+    local_files_only: bool | None = None,
+):
+    """Load the embedding model lazily.
 
-    `sentence_transformers` is imported lazily so that modules downstream of
-    few_shot (e.g. entry_point.py in cache-only mode) don't force an install
-    of transformers/torch when they never invoke the few-shot path.
+    Importing this module never imports sentence-transformers. Cached replay
+    can therefore run without loading the embedding stack.
     """
     from sentence_transformers import SentenceTransformer
 
-    model = SentenceTransformer("all-mpnet-base-v2")
+    kwargs = {"revision": revision}
+    if local_files_only is not None:
+        kwargs["local_files_only"] = local_files_only
+    model = SentenceTransformer(model_id, **kwargs)
     try:
         yield model
     finally:
@@ -63,149 +48,260 @@ def embedding_model_context():
         gc.collect()
 
 
-# --------------------------------------------------------------------
-# Embedding helpers (live path)
-# --------------------------------------------------------------------
-
-
 def cosine_similarity(a, b):
     return np.dot(a, b)
 
 
+def _sorted_module_files(directory: Path | str) -> list[Path]:
+    directory = Path(directory)
+    return sorted(
+        path
+        for path in directory.iterdir()
+        if path.is_file() and path.suffix.lower() in {".v", ".sv"}
+    )
+
+
 def get_example_embeddings(embedding_model, example_modules_dir):
-    """Compute and return `{filename: embedding}` for every `.sv` file
-    under `example_modules_dir`.
-    """
-    example_texts = []
-    example_files = []
+    """Return embeddings keyed by filename, with deterministic input order."""
+    if embedding_model is None:
+        raise ValueError("An embedding model is required for live selection")
 
-    for fname in os.listdir(example_modules_dir):
-        if fname.endswith(".sv"):
-            with open(
-                os.path.join(example_modules_dir, fname), "r", encoding="utf-8"
-            ) as f:
-                example_texts.append(f.read())
-                example_files.append(fname)
-
+    example_paths = _sorted_module_files(example_modules_dir)
+    example_texts = [path.read_text(encoding="utf-8") for path in example_paths]
     example_embeddings = embedding_model.encode(
         example_texts,
         normalize_embeddings=True,
-        num_workers=16,
-        show_progress_bar=True,
+        show_progress_bar=False,
     )
-    assert len(example_embeddings) == len(example_texts)
-    return {example_files[i]: example_embeddings[i] for i in range(len(example_files))}
+    if len(example_embeddings) != len(example_paths):
+        raise RuntimeError("Embedding model returned an unexpected result count")
+    return {
+        path.name: example_embeddings[index]
+        for index, path in enumerate(example_paths)
+    }
 
 
-# --------------------------------------------------------------------
-# Selection-cache singleton
-# --------------------------------------------------------------------
+def sha256_file(path: Path | str) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
 
 _SELECTION_CACHE: dict | None = None
 _CACHE_PATH: Path | None = None
-_CACHE_MISSED_MODULES: set[str] = set()
+_CACHE_REPOSITORY_ROOT: Path | None = None
 
 
-def load_fewshot_selection_cache(path: Path | str) -> dict:
-    """Load the shipped `data/fewshot_selection.json` into a process-wide
-    singleton. Subsequent `get_k_nearest` calls consult the singleton
-    before computing anything live. See Design §16.
-    """
-    global _SELECTION_CACHE, _CACHE_PATH
-    path = Path(path)
-    _SELECTION_CACHE = json.loads(path.read_text(encoding="utf-8"))
-    _CACHE_PATH = path
-    atexit.register(_log_cache_miss_summary)
+def clear_fewshot_selection_cache() -> None:
+    """Reset process-local cache state (primarily useful for tests)."""
+    global _SELECTION_CACHE, _CACHE_PATH, _CACHE_REPOSITORY_ROOT
+    _SELECTION_CACHE = None
+    _CACHE_PATH = None
+    _CACHE_REPOSITORY_ROOT = None
 
-    modules_count = len(_SELECTION_CACHE.get("modules", {}))
-    max_k = _SELECTION_CACHE.get("_generated_from", {}).get("max_k_cached", "?")
+
+def _relative_key(path: Path | str, repository_root: Path) -> str:
+    resolved = Path(path).resolve()
+    try:
+        return resolved.relative_to(repository_root).as_posix()
+    except ValueError as exc:
+        raise SelectionCacheError(
+            f"Input {resolved} is outside selection-cache repository root "
+            f"{repository_root}"
+        ) from exc
+
+
+def _validate_hashes(
+    hashes: dict[str, str], repository_root: Path, description: str
+) -> None:
+    for relative_path in sorted(hashes):
+        path = repository_root / relative_path
+        if not path.is_file():
+            raise SelectionCacheError(
+                f"{description} is missing: {relative_path} "
+                f"(selection cache: {_CACHE_PATH})"
+            )
+        actual = sha256_file(path)
+        expected = hashes[relative_path]
+        if actual != expected:
+            raise SelectionCacheError(
+                f"{description} hash changed for {relative_path}: "
+                f"expected {expected}, got {actual}"
+            )
+
+
+def load_fewshot_selection_cache(
+    path: Path | str, repository_root: Path | str | None = None
+) -> dict:
+    """Load and validate a permanent selection cache."""
+    global _SELECTION_CACHE, _CACHE_PATH, _CACHE_REPOSITORY_ROOT
+
+    cache_path = Path(path).resolve()
+    if not cache_path.is_file():
+        raise SelectionCacheError(f"Few-shot selection cache not found: {cache_path}")
+
+    try:
+        payload = json.loads(cache_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SelectionCacheError(
+            f"Could not read few-shot selection cache {cache_path}: {exc}"
+        ) from exc
+
+    if payload.get("schema_version") != SELECTION_CACHE_SCHEMA_VERSION:
+        raise SelectionCacheError(
+            f"Unsupported selection-cache schema "
+            f"{payload.get('schema_version')!r}; expected "
+            f"{SELECTION_CACHE_SCHEMA_VERSION}"
+        )
+
+    metadata = payload.get("metadata")
+    modules = payload.get("modules")
+    if not isinstance(metadata, dict) or not isinstance(modules, dict):
+        raise SelectionCacheError(
+            f"Selection cache {cache_path} must contain metadata and modules objects"
+        )
+
+    max_k = metadata.get("max_k")
+    if not isinstance(max_k, int) or max_k <= 0:
+        raise SelectionCacheError(
+            f"Selection cache {cache_path} has invalid metadata.max_k={max_k!r}"
+        )
+
+    root = (
+        Path(repository_root).resolve()
+        if repository_root is not None
+        else cache_path.parent.parent.resolve()
+    )
+    _SELECTION_CACHE = payload
+    _CACHE_PATH = cache_path
+    _CACHE_REPOSITORY_ROOT = root
+
+    example_hashes = metadata.get("example_input_hashes")
+    if not isinstance(example_hashes, dict) or not example_hashes:
+        clear_fewshot_selection_cache()
+        raise SelectionCacheError(
+            f"Selection cache {cache_path} has no example_input_hashes metadata"
+        )
+    try:
+        _validate_hashes(example_hashes, root, "Few-shot example input")
+    except Exception:
+        clear_fewshot_selection_cache()
+        raise
+
     logger.info(
-        "Loaded fewshot selection cache: %s (%d modules, max_k=%s)",
-        path,
-        modules_count,
+        "Loaded few-shot selection cache %s (%d modules, max_k=%d)",
+        cache_path,
+        len(modules),
         max_k,
     )
-    return _SELECTION_CACHE
+    return payload
 
 
 def fewshot_selection_cache_loaded() -> bool:
     return _SELECTION_CACHE is not None
 
 
-def cache_miss_summary() -> list[str]:
-    return sorted(_CACHE_MISSED_MODULES)
-
-
-def _log_cache_miss_summary() -> None:
-    if not _CACHE_MISSED_MODULES:
-        return
-    count = len(_CACHE_MISSED_MODULES)
-    sample = sorted(_CACHE_MISSED_MODULES)
-    logger.warning(
-        "fewshot_selection cache miss for %d module(s): %s. "
-        "This usually means the sentence_transformers library has shifted "
-        "from the version used to build the cache (%s). "
-        "Live recompute was used for these modules and will produce a "
-        "different top-k ordering than the cache.",
-        count,
-        ", ".join(sample[:10]) + ("..." if count > 10 else ""),
-        _CACHE_PATH if _CACHE_PATH else "<not loaded>",
-    )
-
-
 def max_k_cached() -> int | None:
-    """Return the maximum k the loaded cache can serve, or None if not loaded."""
     if _SELECTION_CACHE is None:
         return None
-    return int(_SELECTION_CACHE.get("_generated_from", {}).get("max_k_cached", 0))
+    return int(_SELECTION_CACHE["metadata"]["max_k"])
 
 
-# --------------------------------------------------------------------
-# Core lookup
-# --------------------------------------------------------------------
+def _cached_selection(filepath: Path | str, k: int) -> list[tuple[str, float]]:
+    if _SELECTION_CACHE is None or _CACHE_REPOSITORY_ROOT is None:
+        raise SelectionCacheError(
+            "Cached few-shot selection requested before loading a cache"
+        )
+    if k <= 0:
+        return []
 
-
-def get_k_nearest(embedding_model, filepath, examples, k: int = 3):
-    """Return the top-k (filename, similarity) pairs nearest to the input.
-
-    If the selection cache is loaded and contains `basename(filepath)`,
-    returns `top_5_nearest[:k]` from the cache — `embedding_model` and
-    `examples` are ignored. Otherwise falls back to a live
-    sentence_transformers call, recording the miss for the end-of-run
-    warning summary.
-    """
-    module_name = os.path.basename(filepath)
-
-    # Cache hit — no embedding model needed.
-    if _SELECTION_CACHE is not None:
-        cached = _SELECTION_CACHE.get("modules", {}).get(module_name)
-        if cached is not None:
-            top5 = cached.get("top_5_nearest", [])
-            if k > len(top5):
-                # Cache doesn't have enough entries for this request.
-                raise ValueError(
-                    f"Requested k={k} exceeds max_k_cached="
-                    f"{len(top5)} for module {module_name!r}. "
-                    f"Regenerate {_CACHE_PATH} with --k-max {k}."
-                )
-            return [tuple(e) for e in top5[:k]]
-        _CACHE_MISSED_MODULES.add(module_name)
-
-    # Live path (either cache not loaded, or module missing from cache).
-    if embedding_model is None:
-        raise RuntimeError(
-            f"get_k_nearest called with embedding_model=None but no cache "
-            f"entry for {module_name!r}. Either pass an embedding model, "
-            f"or load a selection cache that covers this module."
+    max_k = max_k_cached()
+    if max_k is None or k > max_k:
+        raise SelectionCacheError(
+            f"Requested k={k} exceeds selection-cache maximum {max_k}"
         )
 
-    with open(filepath, "r", encoding="utf-8") as f:
-        new_input_text = f.read()
+    key = _relative_key(filepath, _CACHE_REPOSITORY_ROOT)
+    entry = _SELECTION_CACHE["modules"].get(key)
+    if entry is None:
+        raise SelectionCacheError(
+            f"Selection cache {_CACHE_PATH} has no entry for {key}"
+        )
 
-    new_embedding = embedding_model.encode(new_input_text, normalize_embeddings=True)
+    actual_hash = sha256_file(filepath)
+    expected_hash = entry.get("input_sha256")
+    if actual_hash != expected_hash:
+        raise SelectionCacheError(
+            f"Benchmark input hash changed for {key}: expected "
+            f"{expected_hash}, got {actual_hash}"
+        )
 
-    sims = {
-        fname: cosine_similarity(new_embedding, emb) for fname, emb in examples.items()
-    }
-    top_items = sorted(sims.items(), key=lambda item: item[1], reverse=True)[:k]
-    return top_items
+    nearest = entry.get("nearest")
+    if not isinstance(nearest, list) or len(nearest) < k:
+        raise SelectionCacheError(
+            f"Selection cache entry for {key} contains only "
+            f"{len(nearest) if isinstance(nearest, list) else 0} choices; "
+            f"k={k} was requested"
+        )
+
+    result: list[tuple[str, float]] = []
+    for choice in nearest[:k]:
+        if not isinstance(choice, dict):
+            raise SelectionCacheError(f"Malformed cached selection for {key}")
+        filename = choice.get("filename")
+        similarity = choice.get("similarity")
+        if not isinstance(filename, str) or not isinstance(
+            similarity, (int, float)
+        ):
+            raise SelectionCacheError(f"Malformed cached selection for {key}")
+        result.append((filename, float(similarity)))
+    return result
+
+
+def validate_selection_cache_for_modules(
+    modules_dir: Path | str, k: int
+) -> list[str]:
+    """Validate complete cache coverage and hashes for a benchmark directory."""
+    keys = []
+    for module_path in _sorted_module_files(modules_dir):
+        _cached_selection(module_path, k)
+        assert _CACHE_REPOSITORY_ROOT is not None
+        keys.append(_relative_key(module_path, _CACHE_REPOSITORY_ROOT))
+    return keys
+
+
+def get_k_nearest(
+    embedding_model,
+    filepath,
+    examples,
+    k: int = 3,
+    selection_mode: str = "live",
+):
+    """Return top-k ``(example filename, cosine similarity)`` pairs.
+
+    ``selection_mode='cached'`` is strict: misses, changed inputs, and requests
+    above the cached maximum fail instead of falling back to embeddings.
+    """
+    if selection_mode == "cached":
+        return _cached_selection(filepath, k)
+    if selection_mode != "live":
+        raise ValueError(
+            f"Unknown few-shot selection mode {selection_mode!r}; "
+            "expected 'live' or 'cached'"
+        )
+    if embedding_model is None or examples is None:
+        raise ValueError("Live few-shot selection requires embeddings")
+    if k <= 0:
+        return []
+
+    new_input_text = Path(filepath).read_text(encoding="utf-8")
+    new_embedding = embedding_model.encode(
+        new_input_text, normalize_embeddings=True
+    )
+    similarities = (
+        (filename, float(cosine_similarity(new_embedding, embedding)))
+        for filename, embedding in examples.items()
+    )
+    return sorted(similarities, key=lambda item: (-item[1], item[0]))[:k]

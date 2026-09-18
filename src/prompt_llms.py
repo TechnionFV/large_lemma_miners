@@ -1,5 +1,4 @@
 import json
-from diskcache import Cache
 import hashlib
 import random
 import argparse
@@ -10,14 +9,23 @@ import time
 import re
 import copy
 import logging
+from cache_utils import open_cache
 
 
 class LLMBase(ABC):
-    def __init__(self, model_name: str, storage_dir, cache=None):
+    def __init__(
+        self, model_name: str, storage_dir, cache=None, cache_read_only: bool = False
+    ):
         self.model_name = model_name
         self.cache = (
-            Cache(os.path.join(storage_dir, "llm_cache")) if cache is None else cache
+            open_cache(
+                os.path.join(storage_dir, "llm_cache"),
+                read_only=cache_read_only,
+            )
+            if cache is None
+            else cache
         )
+        self.cache_read_only = cache_read_only
         self.normalized_model_name = self._normalize_model_name(model_name)
 
     def _normalize_model_name(self, model_name):
@@ -110,6 +118,11 @@ class LLMBase(ABC):
         whether the entry existed in the cache, together with the newly generated response.
         """
         assert not (force_cached and cache_more)
+        if self.cache_read_only and (clear or cache_more or not force_cached):
+            raise RuntimeError(
+                "Read-only LLM cache access requires force_cached=True and "
+                "forbids clear/cache_more"
+            )
         if clear:
             self.delete_from_cache(messages)
 
@@ -157,13 +170,15 @@ class LLMBase(ABC):
         return {"cache_hit": cache_hit, "response": sampled}
 
     def get_from_cache(self, messages: Union[str, List[Dict[str, str]]]):
-
         query_hash = self._hash_query(messages)
 
         if query_hash not in self.cache:
             unnormalized_hash = self._hash_query(messages, normalized=False)
             if unnormalized_hash in self.cache:
-                self.store_in_cache(messages, self.cache[unnormalized_hash])
+                responses = self.cache[unnormalized_hash]
+                if self.cache_read_only:
+                    return {"cache_hit": True, "response": responses}
+                self.store_in_cache(messages, responses)
 
         if query_hash in self.cache:
             return {"cache_hit": True, "response": self.cache[query_hash]}
@@ -171,6 +186,8 @@ class LLMBase(ABC):
         return {"cache_hit": False, "response": None}
 
     def delete_from_cache(self, messages: Union[str, List[Dict[str, str]]]):
+        if self.cache_read_only:
+            raise RuntimeError("Cannot delete from a read-only LLM cache")
 
         query_hash = self._hash_query(messages)
 
@@ -178,6 +195,8 @@ class LLMBase(ABC):
             self.cache.delete(query_hash)
 
     def store_in_cache(self, messages: Union[str, List[Dict[str, str]]], responses):
+        if self.cache_read_only:
+            raise RuntimeError("Cannot write to a read-only LLM cache")
         query_key = self._hash_query(messages)
         assert len(responses) and responses[0] != ""  # TODO: ADAPT TO DICT RESPONSES
         self.cache[query_key] = self.cache.get(query_key, []) + responses
@@ -201,8 +220,15 @@ class LLMBase(ABC):
 
 
 class Claude(LLMBase):
-    def __init__(self, model_name: str, storage_dir: str, cache=None):
-        super().__init__(model_name=model_name, storage_dir=storage_dir, cache=cache)
+    def __init__(
+        self, model_name: str, storage_dir: str, cache=None, cache_read_only=False
+    ):
+        super().__init__(
+            model_name=model_name,
+            storage_dir=storage_dir,
+            cache=cache,
+            cache_read_only=cache_read_only,
+        )
 
     def _normalize_messages(self, messages):
 
@@ -295,8 +321,15 @@ class Claude(LLMBase):
 
 
 class GPT(LLMBase):
-    def __init__(self, model_name: str, storage_dir: str, cache=None):
-        super().__init__(model_name=model_name, storage_dir=storage_dir, cache=cache)
+    def __init__(
+        self, model_name: str, storage_dir: str, cache=None, cache_read_only=False
+    ):
+        super().__init__(
+            model_name=model_name,
+            storage_dir=storage_dir,
+            cache=cache,
+            cache_read_only=cache_read_only,
+        )
         # self.openai_api_key = os.getenv('OPENAI_API_KEY')
         self.client = None
 
@@ -359,7 +392,7 @@ class GPT(LLMBase):
         return responses
 
 
-def get_model(model_name, storage_dir=None, cache=None):
+def get_model(model_name, storage_dir=None, cache=None, cache_read_only=False):
     model_classes = {
         "claude": Claude,
         "anthropic": Claude,
@@ -368,7 +401,9 @@ def get_model(model_name, storage_dir=None, cache=None):
         "ft:gpt": GPT,
     }
 
-    init_kwargs = {"cache": cache} if cache is not None else {}
+    init_kwargs = {"cache_read_only": cache_read_only}
+    if cache is not None:
+        init_kwargs["cache"] = cache
 
     return next(
         (
@@ -388,7 +423,12 @@ def prompt_llms(config_file, **kwargs):
     model_name = params["model_name"]
     messages = params["prompt"] if "prompt" in params else params["messages"]
 
-    model = get_model(model_name, kwargs.pop("storage_dir", None), kwargs.pop("cache", None))
+    model = get_model(
+        model_name,
+        kwargs.pop("storage_dir", None),
+        kwargs.pop("cache", None),
+        cache_read_only=kwargs.pop("cache_read_only", False),
+    )
     if model is None:
         raise ValueError(f"Unsupported model: {model_name}")
 

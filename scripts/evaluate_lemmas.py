@@ -145,6 +145,7 @@ def evaluate_lemmas(
     disable_cache=False,
     aggregate=True,
     ebmc_timeout=120,
+    strict_replay=False,
     **kwargs,
 ):
     assert not disable_cache or evaluation_cache_mode == CacheMode.NO_CACHE
@@ -158,7 +159,7 @@ def evaluate_lemmas(
         lemmas_dict = json.load(f)
 
     items = (
-        lemmas_dict.items()
+        sorted(lemmas_dict.items())
         if not module_to_eval
         else [(module_to_eval, lemmas_dict[module_to_eval])]
     )
@@ -203,6 +204,11 @@ def evaluate_lemmas(
             skip_correctness=skip_correctness,
             timeout=ebmc_timeout,
             init_cache_with_no_cache_mode=(not disable_cache),
+            cache_read_only=(
+                evaluation_cache_mode == CacheMode.FORCE_CACHED
+                or not cache_result
+            ),
+            fail_on_cache_miss=strict_replay,
         )
         logger = logging.getLogger(__name__)
 
